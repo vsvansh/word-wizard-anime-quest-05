@@ -14,32 +14,39 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [theme, setTheme] = useState<Theme>('light');
+  
+  // Initialize theme on component mount
+  useEffect(() => {
     // Check if theme is stored in localStorage
     const storedTheme = localStorage.getItem('theme') as Theme | null;
     
     // Check for system preference if no stored theme
     if (!storedTheme) {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(isDarkMode ? 'dark' : 'light');
+    } else {
+      setTheme(storedTheme);
     }
-    
-    return storedTheme || 'light';
-  });
+  }, []);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
   
   // Theme icon component
   const ThemeIcon: React.FC = () => {
-    return theme === 'light' ? (
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-    ) : (
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+    return (
+      <div className="relative w-[1.2rem] h-[1.2rem]">
+        <Sun className="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all duration-300 dark:rotate-90 dark:scale-0" />
+        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
+      </div>
     );
   };
 
   useEffect(() => {
+    if (!theme) return;
+    
     // Store theme preference
     localStorage.setItem('theme', theme);
     
@@ -49,11 +56,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.add(theme);
     
     // Add a cool transition effect when changing themes
-    if (theme === 'dark') {
-      document.body.style.transition = 'background-color 0.5s ease-in-out';
-    } else {
-      document.body.style.transition = 'background-color 0.5s ease-in-out';
-    }
+    document.body.style.transition = 'background-color 0.5s ease-in-out, color 0.5s ease-in-out';
     
     // Create sparkle effect on theme change
     const sparkle = document.createElement('div');
@@ -79,6 +82,32 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setTimeout(() => {
       sparkle.remove();
     }, 1000);
+    
+    // Add beautiful dark mode specific styles 
+    if (theme === 'dark') {
+      document.body.classList.add('dark-theme-active');
+      document.body.style.backgroundImage = 'radial-gradient(circle at 50% 50%, #2d1b69 0%, #1a103e 100%)';
+    } else {
+      document.body.classList.remove('dark-theme-active');
+      document.body.style.backgroundImage = 'radial-gradient(circle at 50% 50%, #f5f7fa 0%, #e8eaed 100%)';
+    }
+    
+    // Add anime-inspired theme music based on theme
+    const playThemeSound = () => {
+      const audio = new Audio();
+      audio.volume = 0.2;
+      audio.src = theme === 'dark' 
+        ? 'https://assets.mixkit.co/sfx/preview/mixkit-magical-spell-sketch-2596.mp3' 
+        : 'https://assets.mixkit.co/sfx/preview/mixkit-fairy-magic-sparkle-875.mp3';
+      audio.play().catch(e => console.log('Audio play prevented by browser policy', e));
+    };
+
+    // Play theme sound on user interaction
+    const handleUserInteraction = () => {
+      playThemeSound();
+      document.removeEventListener('click', handleUserInteraction);
+    };
+    document.addEventListener('click', handleUserInteraction);
     
   }, [theme]);
 

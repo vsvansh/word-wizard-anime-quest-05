@@ -244,7 +244,9 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
             return 'correct'; // Return immediately if we find a correct match
           } else if (letterObj.state === 'wrong-position' && highestState !== 'correct') {
             highestState = 'wrong-position';
-          } else if (letterObj.state === 'incorrect' && highestState !== 'correct' && highestState !== 'wrong-position') {
+          } else if (letterObj.state === 'incorrect' && 
+                    highestState !== 'correct' && 
+                    highestState !== 'wrong-position') {
             highestState = 'incorrect';
           }
         }
