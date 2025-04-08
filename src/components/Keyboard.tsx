@@ -26,6 +26,33 @@ const Keyboard: React.FC<KeyboardProps> = ({
     onLetterInput(key);
   };
 
+  // Add keyboard event listener for physical keyboard support
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toUpperCase();
+      
+      // Handle letter keys
+      if (/^[A-Z]$/.test(key)) {
+        onLetterInput(key);
+      }
+      // Handle Enter key
+      else if (event.key === 'Enter') {
+        onSubmitGuess();
+      }
+      // Handle Backspace key
+      else if (event.key === 'Backspace') {
+        onBackspace();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    
+    // Clean up event listener
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onLetterInput, onBackspace, onSubmitGuess]);
+
   return (
     <div className="w-full max-w-lg mx-auto mt-4">
       {rows.map((row, rowIndex) => (

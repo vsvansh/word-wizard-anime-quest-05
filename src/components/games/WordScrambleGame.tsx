@@ -6,6 +6,7 @@ import { Sparkles, RefreshCw, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimeCharacter from '../AnimeCharacter';
+import ConfettiExplosion from '../ConfettiExplosion';
 import audioManager from '@/lib/audioManager';
 
 // Simple list of anime-related words
@@ -36,6 +37,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
   const [characterMood, setCharacterMood] = useState<'neutral' | 'happy' | 'thinking' | 'excited' | 'confused'>('neutral');
   const [difficultyMultiplier, setDifficultyMultiplier] = useState(1);
   const [wordLetters, setWordLetters] = useState<{letter: string, position: number}[]>([]);
+  const [showConfetti, setShowConfetti] = useState(false);
   const { toast } = useToast();
 
   // Set difficulty multiplier
@@ -116,6 +118,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
       const points = Math.ceil(10 * difficultyMultiplier);
       setScore(prev => prev + points);
       setCharacterMood('excited');
+      setShowConfetti(true);
       audioManager.playSound('win');
       
       toast({
@@ -126,7 +129,8 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
       setTimeout(() => {
         generateNewWord();
         setCharacterMood('neutral');
-      }, 1000);
+        setShowConfetti(false);
+      }, 1500);
     } else {
       setCharacterMood('confused');
       audioManager.playSound('wrong');
@@ -200,8 +204,47 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Add keyboard support
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!gameActive) return;
+      
+      // If key is a letter and matches an available letter
+      const key = event.key.toUpperCase();
+      if (/^[A-Z]$/.test(key)) {
+        const letterIndex = wordLetters.findIndex(l => l.letter === key);
+        if (letterIndex !== -1) {
+          handleLetterClick(key, wordLetters[letterIndex].position);
+        }
+      }
+      
+      // If key is Enter, submit guess
+      if (event.key === 'Enter' && userGuess.length === currentWord.length) {
+        handleSubmitGuess();
+      }
+      
+      // If key is Backspace, reset
+      if (event.key === 'Backspace') {
+        handleReset();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [gameActive, wordLetters, userGuess, currentWord]);
+
   return (
-    <Card className="anime-card p-6 max-w-md mx-auto">
+    <Card className="anime-card p-6 max-w-md mx-auto relative">
+      <ConfettiExplosion 
+        show={showConfetti} 
+        onComplete={() => setShowConfetti(false)}
+        pieces={80}
+        origin="top"
+      />
+      
       <div className="text-center mb-6">
         <h3 className="text-2xl font-manga bg-gradient-to-r from-wizard-purple to-wizard-blue text-transparent bg-clip-text mb-2">
           Word Scramble Challenge
@@ -219,24 +262,24 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
             <h4 className="font-bold mb-2">How to Play:</h4>
             <p className="text-sm text-foreground/80">
               Unscramble as many anime-related words as you can in {timeLimit} seconds! 
-              Each correct answer is worth points based on difficulty.
+              Each correct answer is worth points based on difficulty. Use your keyboard or click the letters.
             </p>
           </div>
           
           <div className="flex flex-col space-y-3">
             <Button
               onClick={startGame}
-              className="btn-anime w-full py-6"
+              className="btn-anime w-full py-6 relative overflow-hidden energy-aura"
             >
               <Sparkles className="mr-2 h-5 w-5" />
-              Start Game
+              <span className="relative z-10">Start Game</span>
             </Button>
           </div>
         </div>
       ) : (
         <div className="space-y-6">
           <div className="flex justify-between">
-            <div className="bg-wizard-yellow/10 dark:bg-wizard-yellow/20 px-4 py-2 rounded-lg text-center min-w-20">
+            <div className="bg-wizard-yellow/10 dark:bg-wizard-yellow/20 px-4 py-2 rounded-lg text-center min-w-20 animate-pulse-glow">
               <p className="text-xs text-wizard-yellow font-bold">SCORE</p>
               <p className="text-xl font-bold">{score}</p>
             </div>
@@ -259,12 +302,16 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
           <div className="relative py-4">
             <div className="flex justify-center space-x-2 mb-4">
               {currentWord.split('').map((_, index) => (
-                <div 
+                <motion.div 
                   key={index} 
                   className={`w-10 h-10 border-2 ${userGuess[index] ? 'border-wizard-purple bg-wizard-purple/10' : 'border-dashed border-gray-300 dark:border-gray-700'} rounded-lg flex items-center justify-center font-bold text-lg`}
+                  animate={userGuess[index] ? { 
+                    scale: [1, 1.1, 1],
+                    transition: { duration: 0.3 }
+                  } : {}}
                 >
                   {userGuess[index] || ''}
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -279,7 +326,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.8, opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="w-10 h-10 border-2 border-wizard-blue bg-wizard-blue/10 hover:bg-wizard-blue/20 rounded-lg flex items-center justify-center font-bold text-lg transform hover:scale-110 transition-transform"
+                  className="w-10 h-10 border-2 border-wizard-blue bg-wizard-blue/10 hover:bg-wizard-blue/20 rounded-lg flex items-center justify-center font-bold text-lg transform hover:scale-110 transition-transform hover:shadow-wizard"
                   onClick={() => handleLetterClick(letterObj.letter, letterObj.position)}
                 >
                   {letterObj.letter}
@@ -292,7 +339,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
           <div className="flex justify-between gap-4 mt-4">
             <Button 
               variant="outline" 
-              className="flex-1 border-gray-300 dark:border-gray-700"
+              className="flex-1 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
               onClick={handleReset}
             >
               <RefreshCw className="mr-2 h-4 w-4" />
@@ -300,7 +347,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({
             </Button>
             
             <Button 
-              className="flex-1 bg-wizard-purple hover:bg-wizard-purple/90"
+              className="flex-1 bg-gradient-to-r from-wizard-purple to-wizard-blue hover:from-wizard-pink hover:to-wizard-purple transition-all duration-500"
               onClick={handleSubmitGuess}
               disabled={userGuess.length !== currentWord.length}
             >
