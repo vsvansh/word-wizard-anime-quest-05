@@ -114,6 +114,66 @@ const config = {
             transform: "scale(1)", 
             opacity: "1" 
           }
+        },
+        "shimmer": {
+          "0%": {
+            transform: "translateX(-100%)"
+          },
+          "100%": {
+            transform: "translateX(100%)"
+          }
+        },
+        "fade-in": {
+          "0%": { 
+            opacity: "0",
+            transform: "translateY(10px)"
+          },
+          "100%": { 
+            opacity: "1",
+            transform: "translateY(0)"
+          }
+        },
+        "sakura-fall": {
+          "0%": {
+            transform: "translateY(-10px) rotate(0deg)",
+            opacity: "0"
+          },
+          "10%": {
+            opacity: "1"
+          },
+          "100%": {
+            transform: "translateY(100vh) rotate(720deg)",
+            opacity: "0"
+          }
+        },
+        "magical-glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 10px 2px rgba(139, 92, 246, 0.3)"
+          },
+          "50%": {
+            boxShadow: "0 0 20px 5px rgba(139, 92, 246, 0.5)"
+          }
+        },
+        "letter-pop": {
+          "0%": {
+            transform: "scale(0.8)",
+            opacity: "0"
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1"
+          }
+        },
+        "rotate-border": {
+          "0%": {
+            backgroundPosition: "0% 50%"
+          },
+          "50%": {
+            backgroundPosition: "100% 50%"
+          },
+          "100%": {
+            backgroundPosition: "0% 50%"
+          }
         }
       },
       animation: {
@@ -124,7 +184,13 @@ const config = {
         "wiggle": "wiggle 2s ease-in-out infinite",
         "spin-slow": "spin-slow 6s linear infinite",
         "bounce-light": "bounce-light 2s ease-in-out infinite",
-        "scale-in": "scale-in 0.3s ease-out"
+        "scale-in": "scale-in 0.3s ease-out",
+        "shimmer": "shimmer 2s infinite",
+        "fade-in": "fade-in 0.3s ease-out",
+        "sakura-fall": "sakura-fall 10s linear forwards",
+        "magical-glow": "magical-glow 3s ease-in-out infinite",
+        "letter-pop": "letter-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        "rotate-border": "rotate-border 3s linear infinite"
       },
     },
   },

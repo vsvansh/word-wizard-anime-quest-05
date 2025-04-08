@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import AnimeCharacter from './AnimeCharacter';
-import { Sparkles, Zap, X } from 'lucide-react';
+import { Sparkles, Zap, X, RefreshCw, BookOpen } from 'lucide-react';
 import { getRandomWord } from '@/lib/wordBank';
 import audioManager from '@/lib/audioManager';
 
@@ -40,6 +39,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     return saved ? JSON.parse(saved) : true;
   });
   const [showCorrectWord, setShowCorrectWord] = useState(false);
+  const [wordDefinition, setWordDefinition] = useState<string | null>(null);
 
   useEffect(() => {
     if (useRandomWord) {
@@ -235,6 +235,45 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     audioManager.playSound('hint');
   };
 
+  const lookupDefinition = async () => {
+    if (wordDefinition) {
+      setWordDefinition(null);
+      return;
+    }
+    
+    setCharacterMood('thinking');
+    
+    // Simple word definitions for game purposes
+    const animeWordDefinitions: Record<string, string> = {
+      'anime': 'Japanese animation characterized by colorful artwork and fantastical themes',
+      'manga': 'Japanese comic books or graphic novels with a distinctive art style',
+      'ninja': 'A covert agent or mercenary in feudal Japan skilled in unorthodox warfare',
+      'otaku': 'A person with consuming interests in anime, manga, and other Japanese pop culture',
+      'mecha': 'A genre of science fiction focusing on robots or machines controlled by people',
+      'kaiju': 'Japanese word for "strange beast" or "monster", referring to giant creatures in film',
+      'kawaii': 'The quality of being cute, adorable, or lovable in Japanese culture',
+      'bento': 'A single-portion take-out or home-packed meal common in Japanese cuisine',
+      'haiku': 'A traditional form of Japanese poetry consisting of three phrases',
+      'sushi': 'A Japanese dish of prepared vinegared rice with various ingredients',
+      'sakura': 'Cherry blossoms symbolic in Japanese culture',
+      'sensei': 'A teacher or instructor, especially one with mastery in a skill or art'
+    };
+    
+    const definition = animeWordDefinitions[word.toLowerCase()] || 
+      'This word relates to Japanese anime or culture. Try to guess it!';
+    
+    setWordDefinition(definition);
+    audioManager.playSound('spell');
+    setHintsUsed(prev => Math.min(prev + 1, 2)); // Using definition costs a hint
+    
+    toast({
+      title: "Word Hint",
+      description: "Definition revealed! This counts as using a hint.",
+    });
+    
+    setTimeout(() => setCharacterMood('happy'), 1000);
+  };
+
   const handleReset = () => {
     const initialAttempts: GuessLetterState[][] = Array(maxAttempts)
       .fill(null)
@@ -251,6 +290,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     setHintsUsed(0);
     setHintLetterIndex(null);
     setShowCorrectWord(false);
+    setWordDefinition(null);
     audioManager.playSound('click');
   };
 
@@ -316,92 +356,119 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       onKeyDown={handleKeyDown}
     >
       <div className="flex items-center justify-between mb-4">
-        {showHints && (
+        <div className="flex space-x-2">
+          {showHints && (
+            <Button 
+              variant="outline"
+              size="sm"
+              className="text-wizard-purple border-wizard-purple hover:bg-wizard-purple/10 relative overflow-hidden group"
+              onClick={useHint}
+              disabled={completed || hintsUsed >= 2}
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-wizard-purple/0 via-wizard-purple/5 to-wizard-purple/0 group-hover:animate-shimmer"></span>
+              <Zap className="w-4 h-4 mr-1" />
+              Hint ({2 - hintsUsed})
+            </Button>
+          )}
+          
           <Button 
             variant="outline"
             size="sm"
-            className="text-wizard-purple border-wizard-purple hover:bg-wizard-purple/10"
-            onClick={useHint}
+            className="text-wizard-blue border-wizard-blue hover:bg-wizard-blue/10 relative overflow-hidden group"
+            onClick={lookupDefinition}
             disabled={completed || hintsUsed >= 2}
           >
-            <Zap className="w-4 h-4 mr-1" />
-            Hint ({2 - hintsUsed} left)
+            <span className="absolute inset-0 bg-gradient-to-r from-wizard-blue/0 via-wizard-blue/5 to-wizard-blue/0 group-hover:animate-shimmer"></span>
+            <BookOpen className="w-4 h-4 mr-1" />
+            {wordDefinition ? 'Hide Def' : 'Definition'}
           </Button>
-        )}
+        </div>
         
         <Button 
           variant="outline"
           size="sm"
-          className="text-gray-500 border-gray-300 hover:bg-gray-100 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-800" 
+          className="text-gray-500 border-gray-300 hover:bg-gray-100 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-800 relative overflow-hidden group" 
           onClick={handleReset}
         >
-          <X className="w-4 h-4 mr-1" />
+          <span className="absolute inset-0 bg-gradient-to-r from-gray-400/0 via-gray-400/5 to-gray-400/0 group-hover:animate-shimmer"></span>
+          <RefreshCw className="w-4 h-4 mr-1" />
           Reset
         </Button>
       </div>
       
-      <div className="mb-8">
-        <AnimeCharacter mood={characterMood} className="mb-4" />
-        
-        <div className="space-y-2">
-          {attempts.map((attempt, attemptIndex) => (
-            <div key={attemptIndex} className="flex justify-center space-x-2">
-              {attempt.map((letterObj, letterIndex) => {
-                // Current attempt row that's being filled
-                const isCurrentAttemptRow = 
-                  attemptIndex === attempts.findIndex(a => a.some(l => l.letter === '') || a.every(l => l.letter === ''));
-                
-                // Should show the current input in this position
-                const showCurrentInput = 
-                  isCurrentAttemptRow && 
-                  letterIndex < currentAttempt.length && 
-                  letterObj.letter === '';
-                
-                // Determine what to display
-                const displayLetter = showCurrentInput 
-                  ? currentAttempt[letterIndex].toUpperCase()
-                  : letterObj.letter.toUpperCase();
-                
-                // Determine special styling for hint letters
-                const isHintLetter = 
-                  isCurrentAttemptRow && 
-                  hintLetterIndex === letterIndex && 
-                  letterIndex < currentAttempt.length;
-                
-                return (
-                  <div 
-                    key={letterIndex}
-                    className={`
-                      ${renderLetterClassName(letterObj.state)}
-                      ${showCurrentInput ? 'border-gray-400 bg-gray-50 dark:bg-gray-700 dark:border-gray-500' : ''}
-                      ${isHintLetter ? 'ring-2 ring-wizard-yellow ring-offset-2 animate-pulse' : ''}
-                    `}
-                  >
-                    {displayLetter}
-                    {isHintLetter && (
-                      <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-wizard-yellow animate-pulse" />
-                    )}
-                  </div>
-                );
-              })}
+      <div className="mb-8 relative">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-wizard-purple/5 to-wizard-blue/5 rounded-xl"></div>
+        <div className="p-4 relative">
+          <AnimeCharacter mood={characterMood} className="mb-4" />
+          
+          {wordDefinition && (
+            <div className="mb-4 bg-wizard-blue/10 p-3 rounded-lg text-sm border border-wizard-blue/20 animate-scale-in">
+              <p className="font-medium text-foreground/80">{wordDefinition}</p>
             </div>
-          ))}
-        </div>
-
-        {showCorrectWord && completed && (
-          <div className="mt-4 bg-wizard-purple/10 dark:bg-wizard-purple/20 p-3 rounded-lg text-center animate-fade-in">
-            <p className="text-sm text-foreground/80">
-              The correct word was:
-            </p>
-            <p className="text-xl font-bold font-manga tracking-wider bg-gradient-to-r from-wizard-purple to-wizard-blue text-transparent bg-clip-text mt-1">
-              {word.toUpperCase()}
-            </p>
+          )}
+          
+          <div className="space-y-2">
+            {attempts.map((attempt, attemptIndex) => (
+              <div key={attemptIndex} className="flex justify-center space-x-2">
+                {attempt.map((letterObj, letterIndex) => {
+                  // Current attempt row that's being filled
+                  const isCurrentAttemptRow = 
+                    attemptIndex === attempts.findIndex(a => a.some(l => l.letter === '') || a.every(l => l.letter === ''));
+                  
+                  // Should show the current input in this position
+                  const showCurrentInput = 
+                    isCurrentAttemptRow && 
+                    letterIndex < currentAttempt.length && 
+                    letterObj.letter === '';
+                  
+                  // Determine what to display
+                  const displayLetter = showCurrentInput 
+                    ? currentAttempt[letterIndex].toUpperCase()
+                    : letterObj.letter.toUpperCase();
+                  
+                  // Determine special styling for hint letters
+                  const isHintLetter = 
+                    isCurrentAttemptRow && 
+                    hintLetterIndex === letterIndex && 
+                    letterIndex < currentAttempt.length;
+                  
+                  return (
+                    <div 
+                      key={letterIndex}
+                      className={`
+                        ${renderLetterClassName(letterObj.state)}
+                        ${showCurrentInput ? 'border-gray-400 bg-gray-50 dark:bg-gray-700 dark:border-gray-500' : ''}
+                        ${isHintLetter ? 'ring-2 ring-wizard-yellow ring-offset-2 animate-pulse' : ''}
+                        animate-letter-pop
+                      `}
+                      style={{ animationDelay: `${letterIndex * 50}ms` }}
+                    >
+                      {displayLetter}
+                      {isHintLetter && (
+                        <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-wizard-yellow animate-pulse" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
-        )}
+
+          {showCorrectWord && completed && (
+            <div className="mt-4 bg-wizard-purple/10 dark:bg-wizard-purple/20 p-3 rounded-lg text-center animate-fade-in">
+              <p className="text-sm text-foreground/80">
+                The correct word was:
+              </p>
+              <p className="text-xl font-bold font-manga tracking-wider bg-gradient-to-r from-wizard-purple to-wizard-blue text-transparent bg-clip-text mt-1">
+                {word.toUpperCase()}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
       
-      {/* Virtual keyboard */}
-      <div className="w-full max-w-md mx-auto">
+      {/* Virtual keyboard with improved styling */}
+      <div className="w-full max-w-md mx-auto bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-200 dark:border-gray-700">
         {keyboard.map((row, rowIndex) => (
           <div key={rowIndex} className="flex justify-center mb-2 space-x-1">
             {row.map((key) => {
@@ -421,10 +488,12 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
                     ${bgColor}
                     rounded-md font-medium transition-colors 
                     ${isSpecialKey ? 'px-3 py-3 text-xs' : 'w-8 h-10 text-sm'}
-                    transform hover:scale-105 active:scale-95
+                    transform hover:scale-105 active:scale-95 shadow-sm
+                    relative overflow-hidden
                   `}
                   disabled={completed}
                 >
+                  <span className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity"></span>
                   {key === 'backspace' ? '⌫' : key === 'enter' ? 'Enter' : key.toUpperCase()}
                 </button>
               );
