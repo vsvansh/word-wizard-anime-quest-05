@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Backspace, Send } from 'lucide-react';
+import { SendHorizontal, Delete } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface KeyboardProps {
@@ -36,7 +36,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
               className="h-12 px-3 rounded-lg mr-1 bg-wizard-blue text-white font-bold flex items-center justify-center"
               onClick={onSubmitGuess}
             >
-              <Send className="h-5 w-5" />
+              <SendHorizontal className="h-5 w-5" />
             </motion.button>
           )}
           {row.map((key) => (
@@ -55,30 +55,32 @@ const Keyboard: React.FC<KeyboardProps> = ({
               className="h-12 px-3 rounded-lg ml-1 bg-wizard-pink text-white font-bold flex items-center justify-center"
               onClick={onBackspace}
             >
-              <Backspace className="h-5 w-5" />
+              <Delete className="h-5 w-5" />
             </motion.button>
           )}
         </div>
       ))}
       
-      <style jsx>{`
-        .key-button {
-          min-width: 36px;
-          transition: all 0.2s;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .key-button:active {
-          transform: translateY(1px);
-        }
-        @media (max-width: 480px) {
+      <style>
+        {`
           .key-button {
-            min-width: 28px;
-            height: 42px;
-            font-size: 14px;
-            margin: 0 2px;
+            min-width: 36px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
           }
-        }
-      `}</style>
+          .key-button:active {
+            transform: translateY(1px);
+          }
+          @media (max-width: 480px) {
+            .key-button {
+              min-width: 28px;
+              height: 42px;
+              font-size: 14px;
+              margin: 0 2px;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

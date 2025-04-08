@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
-import { Dictionary, Book, External } from 'lucide-react';
+import { Book, ExternalLink, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 
@@ -61,7 +61,7 @@ const DefinitionDisplay: React.FC<DefinitionDisplayProps> = ({ word }) => {
     return (
       <Card className="p-4 mt-4 bg-wizard-purple/10 dark:bg-wizard-purple/20 animate-pulse">
         <div className="flex items-center justify-center space-x-2">
-          <Dictionary className="h-5 w-5 text-wizard-purple animate-spin-slow" />
+          <Search className="h-5 w-5 text-wizard-purple animate-spin-slow" />
           <span className="font-medium">Loading definition...</span>
         </div>
       </Card>
@@ -89,7 +89,7 @@ const DefinitionDisplay: React.FC<DefinitionDisplayProps> = ({ word }) => {
       <Card className="p-4 bg-wizard-purple/10 dark:bg-wizard-purple/20 border-wizard-purple/20">
         <div className="flex justify-between items-start mb-2">
           <div className="flex items-center">
-            <Dictionary className="h-5 w-5 text-wizard-purple mr-2" />
+            <Book className="h-5 w-5 text-wizard-purple mr-2" />
             <h3 className="text-lg font-bold font-manga">Definition</h3>
           </div>
           
@@ -105,7 +105,7 @@ const DefinitionDisplay: React.FC<DefinitionDisplayProps> = ({ word }) => {
               rel="noopener noreferrer"
               className="flex items-center justify-center"
             >
-              <External className="h-4 w-4" />
+              <ExternalLink className="h-4 w-4" />
               <span className="sr-only">More info</span>
             </a>
           </Button>
