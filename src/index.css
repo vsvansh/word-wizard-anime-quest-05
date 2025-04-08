@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Russo+One&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -309,8 +309,120 @@
   .ring-wizard-pink {
     --tw-ring-color: hsl(var(--wizard-pink));
   }
+  
+  /* Manga/Anime-style components */
+  .manga-border {
+    @apply border-4 border-black dark:border-white relative;
+    box-shadow: 4px 4px 0px 0px #000;
+  }
+  
+  .manga-border::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: repeating-linear-gradient(
+      45deg,
+      hsl(var(--wizard-purple) / 20%),
+      hsl(var(--wizard-purple) / 20%) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    z-index: -1;
+    pointer-events: none;
+  }
+  
+  .manga-speech-bubble {
+    @apply relative bg-white dark:bg-gray-800 p-4 rounded-lg border-2 border-black dark:border-gray-600 font-manga;
+  }
+  
+  .manga-speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid white;
+  }
+  
+  .dark .manga-speech-bubble::after {
+    border-top-color: #1f2937;
+  }
+  
+  .power-button {
+    @apply relative overflow-hidden bg-gradient-to-r from-wizard-purple to-wizard-blue text-white font-manga rounded-lg transition-all duration-300 py-3 px-6;
+  }
+  
+  .power-button::before {
+    @apply content-[''] absolute inset-0 bg-gradient-to-r from-wizard-pink via-wizard-purple to-wizard-blue opacity-0 transition-opacity duration-500;
+  }
+  
+  .power-button:hover::before {
+    @apply opacity-100 animate-pulse;
+  }
+  
+  .power-button span {
+    @apply relative z-10;
+  }
+  
+  /* Action effects */
+  .action-effect {
+    @apply relative inline-block;
+  }
+  
+  .action-effect::before {
+    @apply content-[''] absolute left-0 bottom-0 w-full h-1 bg-wizard-yellow transform scale-x-0 origin-bottom-left transition-transform duration-300;
+  }
+  
+  .action-effect:hover::before {
+    @apply transform scale-x-100;
+  }
+  
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  /* Add these new Gaming Anime style components */
+  .pixel-art-border {
+    image-rendering: pixelated;
+    box-shadow: 
+      0 0 0 2px #000000,
+      0 0 0 4px hsl(var(--wizard-purple)),
+      0 0 0 6px #000000;
+  }
+  
+  .energy-aura {
+    @apply relative;
+  }
+  
+  .energy-aura::before {
+    @apply content-[''] absolute -inset-0.5 rounded-md bg-gradient-to-r from-wizard-yellow via-wizard-blue to-wizard-purple opacity-50 blur-md animate-pulse-glow;
+    z-index: -1;
+  }
+  
+  .anime-button {
+    @apply relative px-6 py-3 bg-gradient-to-r from-wizard-blue to-wizard-purple text-white font-manga rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden;
+  }
+  
+  .anime-button::before {
+    @apply content-[''] absolute top-0 left-0 w-full h-full bg-gradient-to-r from-wizard-pink to-wizard-purple opacity-0 transition-opacity duration-300;
+  }
+  
+  .anime-button:hover::before {
+    @apply opacity-100;
+  }
+  
+  .anime-button span {
+    @apply relative z-10;
+  }
 }
 
+/* Keep existing animation keyframes and classes */
 @keyframes bounce-light {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px); }
@@ -591,61 +703,4 @@
   bottom: -2px;
   z-index: -1;
   background: linear-gradient(45deg, hsl(var(--wizard-purple)), hsl(var(--wizard-blue)), hsl(var(--wizard-pink)), hsl(var(--wizard-purple)));
-  background-size: 400%;
-  border-radius: inherit;
-  opacity: 0.7;
-  animation: anime-border 3s ease alternate infinite;
-}
-
-@keyframes anime-border {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.btn-anime:hover {
-  transform: translateY(-3px);
-}
-
-.btn-anime:active {
-  transform: translateY(0);
-}
-
-/* Pixel border effect for retro anime style */
-.pixel-border {
-  --pixel-size: 2px;
-  --pixel-color: hsl(var(--wizard-purple));
-  position: relative;
-  border: var(--pixel-size) solid var(--pixel-color);
-  box-shadow: 
-    calc(var(--pixel-size) * 1) calc(var(--pixel-size) * 1) 0 0 var(--pixel-color),
-    calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 0 var(--pixel-color);
-}
-
-/* Kanji background pattern */
-.kanji-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-/* Add more unique anime-themed effects */
-.anime-dust {
-  position: relative;
-}
-
-.anime-dust::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23FFFFFF' fill-opacity='0.2'/%3E%3C/svg%3E");
-  pointer-events: none;
-  opacity: 0.1;
-}
+  background-size:

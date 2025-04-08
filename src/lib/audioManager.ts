@@ -16,6 +16,10 @@ class AudioManager {
     this.loadSound('win', 'https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
     this.loadSound('click', 'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
     this.loadSound('spell', 'https://assets.mixkit.co/sfx/preview/mixkit-magical-spell-sketch-2596.mp3');
+    this.loadSound('levelup', 'https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
+    this.loadSound('achievement', 'https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
+    this.loadSound('typing', 'https://assets.mixkit.co/sfx/preview/mixkit-keyboard-typing-1386.mp3');
+    this.loadSound('match', 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-bonus-229.mp3');
     
     // Set background music
     this.backgroundMusic = new Audio('https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-668.mp3');
@@ -45,6 +49,14 @@ class AudioManager {
         
         if (this.backgroundMusic) {
           this.backgroundMusic.volume = this.musicVolume;
+        }
+        
+        // If music should be playing but isn't, start it
+        if (this.musicPlaying && this.backgroundMusic) {
+          this.backgroundMusic.play().catch(() => {
+            // User interaction needed for autoplay
+            this.musicPlaying = false;
+          });
         }
       }
     } catch (e) {
@@ -148,6 +160,28 @@ class AudioManager {
 
   public areSoundEffectsEnabled(): boolean {
     return this.soundEffectsEnabled;
+  }
+  
+  // Play sound by category
+  public playSoundByCategory(category: 'success' | 'error' | 'interaction'): void {
+    if (!this.soundEffectsEnabled) return;
+    
+    switch (category) {
+      case 'success':
+        this.playSound('correct');
+        break;
+      case 'error':
+        this.playSound('wrong');
+        break;
+      case 'interaction':
+        this.playSound('click');
+        break;
+    }
+  }
+  
+  // Check if audio is supported in the current browser
+  public isAudioSupported(): boolean {
+    return typeof Audio !== 'undefined';
   }
 }
 

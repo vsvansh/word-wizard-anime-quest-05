@@ -68,6 +68,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         manga: ["Bangers", ...fontFamily.sans],
+        anime: ["'Russo One'", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {
@@ -174,7 +175,35 @@ const config = {
           "100%": {
             backgroundPosition: "0% 50%"
           }
-        }
+        },
+        "rotate-y": {
+          "0%": {
+            transform: "rotateY(0deg)"
+          },
+          "100%": {
+            transform: "rotateY(180deg)"
+          }
+        },
+        "power-pulse": {
+          "0%, 100%": {
+            transform: "scale(1)",
+            filter: "brightness(1)"
+          },
+          "50%": {
+            transform: "scale(1.05)",
+            filter: "brightness(1.2)"
+          }
+        },
+        "fire-pulse": {
+          "0%, 100%": {
+            opacity: "0.5",
+            filter: "hue-rotate(0deg)"
+          },
+          "50%": {
+            opacity: "1",
+            filter: "hue-rotate(45deg)"
+          }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -190,7 +219,10 @@ const config = {
         "sakura-fall": "sakura-fall 10s linear forwards",
         "magical-glow": "magical-glow 3s ease-in-out infinite",
         "letter-pop": "letter-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-        "rotate-border": "rotate-border 3s linear infinite"
+        "rotate-border": "rotate-border 3s linear infinite",
+        "rotate-y-180": "rotate-y 0.5s ease-in-out forwards",
+        "power-pulse": "power-pulse 2s ease-in-out infinite",
+        "fire-pulse": "fire-pulse 3s ease-in-out infinite",
       },
     },
   },

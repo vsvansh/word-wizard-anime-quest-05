@@ -4,8 +4,10 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Gamepad2, Trophy, Sparkles, Zap } from 'lucide-react';
-import WordScrambleGame from '@/components/WordScrambleGame';
+import { Gamepad2, Trophy, Sparkles, Zap, PenTool, Brain, Timer } from 'lucide-react';
+import WordScrambleGame from '@/components/games/WordScrambleGame';
+import SpeedTypeGame from '@/components/games/SpeedTypeGame';
+import MemoryMatchGame from '@/components/games/MemoryMatchGame';
 import audioManager from '@/lib/audioManager';
 import { motion } from 'framer-motion';
 
@@ -45,8 +47,15 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
+      className="relative"
     >
-      <Card className="anime-card p-6 border-wizard-pink/30">
+      <div className="absolute -top-10 -left-10 w-40 h-40 bg-wizard-pink/10 rounded-full blur-3xl z-0"></div>
+      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-wizard-blue/10 rounded-full blur-3xl z-0"></div>
+      
+      <Card className="anime-card p-6 border-wizard-pink/30 relative z-10 overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-wizard-purple/5 rounded-full blur-xl"></div>
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-wizard-blue/5 rounded-full blur-xl"></div>
+        
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Gamepad2 className="h-5 w-5 mr-2 text-wizard-pink" />
@@ -70,11 +79,29 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
               />
             )}
             
+            {activeGame === 'speedtype' && (
+              <SpeedTypeGame
+                onComplete={(score) => handleGameComplete(score, 0.7)}
+                difficulty="normal"
+                timeLimit={45}
+              />
+            )}
+            
+            {activeGame === 'memory' && (
+              <MemoryMatchGame
+                onComplete={(score) => handleGameComplete(score, 0.6)}
+                difficulty="normal"
+              />
+            )}
+            
             <div className="mt-4 text-center">
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => setActiveGame(null)}
+                onClick={() => {
+                  setActiveGame(null);
+                  audioManager.playSound('click');
+                }}
                 className="text-wizard-purple border-wizard-purple hover:bg-wizard-purple/10"
               >
                 Back to Minigames
@@ -84,8 +111,8 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
         ) : (
           <Tabs defaultValue="featured" className="w-full">
             <TabsList className="grid grid-cols-2 mb-4">
-              <TabsTrigger value="featured">Featured</TabsTrigger>
-              <TabsTrigger value="all">All Games</TabsTrigger>
+              <TabsTrigger value="featured" onClick={() => audioManager.playSound('click')}>Featured</TabsTrigger>
+              <TabsTrigger value="all" onClick={() => audioManager.playSound('click')}>All Games</TabsTrigger>
             </TabsList>
             
             <TabsContent value="featured" className="space-y-4 mt-2">
@@ -113,25 +140,46 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
                 
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
-                  className="bg-gradient-to-br from-wizard-yellow/10 to-wizard-pink/10 rounded-lg p-4 border border-wizard-pink/20 hover:border-wizard-pink/40 transition-all cursor-pointer opacity-50"
-                  onClick={() => toast({
-                    title: "Coming Soon!",
-                    description: "This minigame will be available in the next update."
-                  })}
+                  className="bg-gradient-to-br from-wizard-green/10 to-wizard-blue/10 rounded-lg p-4 border border-wizard-blue/20 hover:border-wizard-blue/40 transition-all cursor-pointer"
+                  onClick={() => {
+                    setActiveGame('speedtype');
+                    audioManager.playSound('click');
+                  }}
                 >
                   <div className="flex justify-between items-start mb-3">
-                    <h4 className="font-manga text-lg">Word Chain</h4>
-                    <div className="bg-wizard-yellow/20 text-wizard-yellow text-xs px-2 py-0.5 rounded-full">
-                      Coming Soon
+                    <h4 className="font-manga text-lg">Speed Type</h4>
+                    <div className="bg-wizard-blue/20 text-wizard-blue text-xs px-2 py-0.5 rounded-full">
+                      New!
                     </div>
                   </div>
-                  <p className="text-sm text-foreground/60 mb-3">Create word chains where each word starts with the last letter of the previous word.</p>
-                  <div className="flex items-center text-xs text-wizard-yellow">
-                    <Sparkles className="h-3 w-3 mr-1" />
-                    Coming in the next update
+                  <p className="text-sm text-foreground/60 mb-3">Type anime words and phrases as quickly as possible!</p>
+                  <div className="flex items-center text-xs text-wizard-blue">
+                    <Timer className="h-3 w-3 mr-1" />
+                    Challenge your typing speed
                   </div>
                 </motion.div>
               </div>
+              
+              <motion.div 
+                whileHover={{ scale: 1.03 }}
+                className="bg-gradient-to-br from-wizard-pink/10 to-wizard-yellow/10 rounded-lg p-4 border border-wizard-yellow/20 hover:border-wizard-yellow/40 transition-all cursor-pointer"
+                onClick={() => {
+                  setActiveGame('memory');
+                  audioManager.playSound('click');
+                }}
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <h4 className="font-manga text-lg">Memory Match</h4>
+                  <div className="bg-wizard-yellow/20 text-wizard-yellow text-xs px-2 py-0.5 rounded-full">
+                    New!
+                  </div>
+                </div>
+                <p className="text-sm text-foreground/60 mb-3">Match pairs of anime words and characters in this memory challenge!</p>
+                <div className="flex items-center text-xs text-wizard-yellow">
+                  <Brain className="h-3 w-3 mr-1" />
+                  Test your memory skills
+                </div>
+              </motion.div>
             </TabsContent>
             
             <TabsContent value="all" className="mt-2">
@@ -150,23 +198,35 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
                 
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
-                  className="bg-gradient-to-br from-wizard-yellow/10 to-wizard-pink/10 rounded-lg p-3 border border-wizard-pink/20 hover:border-wizard-pink/40 transition-all cursor-pointer opacity-50"
+                  className="bg-gradient-to-br from-wizard-green/10 to-wizard-blue/10 rounded-lg p-3 border border-wizard-blue/20 hover:border-wizard-blue/40 transition-all cursor-pointer"
+                  onClick={() => {
+                    setActiveGame('speedtype');
+                    audioManager.playSound('click');
+                  }}
                 >
-                  <h4 className="font-manga">Word Chain</h4>
-                  <p className="text-xs text-foreground/60">Coming soon</p>
+                  <h4 className="font-manga">Speed Type</h4>
+                  <p className="text-xs text-foreground/60">Type anime words</p>
                 </motion.div>
                 
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
-                  className="bg-gradient-to-br from-wizard-green/10 to-wizard-blue/10 rounded-lg p-3 border border-wizard-blue/20 hover:border-wizard-blue/40 transition-all cursor-pointer opacity-50"
+                  className="bg-gradient-to-br from-wizard-pink/10 to-wizard-yellow/10 rounded-lg p-3 border border-wizard-yellow/20 hover:border-wizard-yellow/40 transition-all cursor-pointer"
+                  onClick={() => {
+                    setActiveGame('memory');
+                    audioManager.playSound('click');
+                  }}
                 >
-                  <h4 className="font-manga">Speed Type</h4>
-                  <p className="text-xs text-foreground/60">Coming soon</p>
+                  <h4 className="font-manga">Memory Match</h4>
+                  <p className="text-xs text-foreground/60">Find matching pairs</p>
                 </motion.div>
                 
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   className="bg-gradient-to-br from-wizard-purple/10 to-wizard-pink/10 rounded-lg p-3 border border-wizard-pink/20 hover:border-wizard-pink/40 transition-all cursor-pointer opacity-50"
+                  onClick={() => toast({
+                    title: "Coming Soon!",
+                    description: "Hangman will be available in the next update."
+                  })}
                 >
                   <h4 className="font-manga">Hangman</h4>
                   <p className="text-xs text-foreground/60">Coming soon</p>
@@ -175,6 +235,10 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   className="bg-gradient-to-br from-wizard-blue/10 to-wizard-green/10 rounded-lg p-3 border border-wizard-green/20 hover:border-wizard-green/40 transition-all cursor-pointer opacity-50"
+                  onClick={() => toast({
+                    title: "Coming Soon!",
+                    description: "Word Search will be available in the next update."
+                  })}
                 >
                   <h4 className="font-manga">Word Search</h4>
                   <p className="text-xs text-foreground/60">Coming soon</p>
@@ -183,6 +247,10 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   className="bg-gradient-to-br from-wizard-yellow/10 to-wizard-green/10 rounded-lg p-3 border border-wizard-yellow/20 hover:border-wizard-yellow/40 transition-all cursor-pointer opacity-50"
+                  onClick={() => toast({
+                    title: "Coming Soon!",
+                    description: "Crossword will be available in the next update."
+                  })}
                 >
                   <h4 className="font-manga">Crossword</h4>
                   <p className="text-xs text-foreground/60">Coming soon</p>
