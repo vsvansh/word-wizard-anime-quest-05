@@ -4,11 +4,13 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import AnimeCharacter from './AnimeCharacter';
 import { Sparkles, Zap, X } from 'lucide-react';
+import { getRandomWord } from '@/lib/wordBank';
 
 interface WordPuzzleProps {
-  word: string;
+  word?: string;
   maxAttempts?: number;
   onComplete?: (success: boolean) => void;
+  useRandomWord?: boolean;
 }
 
 type LetterState = 'correct' | 'wrong-position' | 'incorrect' | 'empty';
@@ -19,17 +21,25 @@ interface GuessLetterState {
 }
 
 const WordPuzzle: React.FC<WordPuzzleProps> = ({
-  word,
+  word: providedWord,
   maxAttempts = 6,
-  onComplete
+  onComplete,
+  useRandomWord = false
 }) => {
   const { toast } = useToast();
+  const [word, setWord] = useState(providedWord || "anime");
   const [attempts, setAttempts] = useState<GuessLetterState[][]>([]);
   const [currentAttempt, setCurrentAttempt] = useState<string>('');
   const [characterMood, setCharacterMood] = useState<'neutral' | 'happy' | 'thinking' | 'excited' | 'confused'>('neutral');
   const [completed, setCompleted] = useState<boolean>(false);
   const [hintsUsed, setHintsUsed] = useState<number>(0);
   const [hintLetterIndex, setHintLetterIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (useRandomWord) {
+      setWord(getRandomWord());
+    }
+  }, [useRandomWord]);
 
   useEffect(() => {
     // Initialize empty attempts
@@ -281,7 +291,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
         <Button 
           variant="outline"
           size="sm"
-          className="text-gray-500 border-gray-300 hover:bg-gray-100" 
+          className="text-gray-500 border-gray-300 hover:bg-gray-100 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-800" 
           onClick={handleReset}
         >
           <X className="w-4 h-4 mr-1" />

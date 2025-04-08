@@ -112,6 +112,15 @@ export default {
 				'pulse-glow': {
 					'0%, 100%': { opacity: '1', transform: 'scale(1)' },
 					'50%': { opacity: '0.8', transform: 'scale(1.05)' },
+				},
+				sparkle: {
+					'0%': { opacity: '0', transform: 'scale(0)' },
+					'50%': { opacity: '1', transform: 'scale(1.2)' },
+					'100%': { opacity: '0', transform: 'scale(0)' },
+				},
+				'spin-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' },
 				}
 			},
 			animation: {
@@ -120,7 +129,9 @@ export default {
 				'bounce-light': 'bounce-light 2s ease-in-out infinite',
 				wiggle: 'wiggle 1s ease-in-out infinite',
 				float: 'float 3s ease-in-out infinite',
-				'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+				'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				sparkle: 'sparkle 2s ease-in-out',
+				'spin-slow': 'spin-slow 6s linear infinite',
 			},
 			fontFamily: {
 				anime: ['Poppins', 'sans-serif'],
