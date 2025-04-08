@@ -240,6 +240,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     for (const attempt of attempts) {
       for (const letterObj of attempt) {
         if (letterObj.letter.toLowerCase() === letter.toLowerCase()) {
+          // Fixed type comparison issue by explicitly handling each case
           if (letterObj.state === 'correct') {
             return 'correct'; // Return immediately if we find a correct match
           } else if (letterObj.state === 'wrong-position' && highestState !== 'correct') {
