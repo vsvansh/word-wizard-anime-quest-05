@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 
 @tailwind base;
@@ -44,6 +45,13 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Wizard theme colors */
+    --wizard-purple: 262 83% 58%;
+    --wizard-blue: 217 100% 60%;
+    --wizard-yellow: 34 100% 53%;
+    --wizard-green: 142 72% 50%;
+    --wizard-pink: 330 100% 76%;
   }
 
   .dark {
@@ -83,6 +91,57 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 262 25% 25%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Wizard theme colors - slightly brighter in dark mode */
+    --wizard-purple: 262 83% 68%;
+    --wizard-blue: 217 100% 65%;
+    --wizard-yellow: 34 100% 60%;
+    --wizard-green: 142 72% 55%;
+    --wizard-pink: 330 80% 78%;
+  }
+  
+  .high-contrast {
+    --wizard-purple: 262 100% 65%;
+    --wizard-blue: 217 100% 70%;
+    --wizard-yellow: 34 100% 60%;
+    --wizard-green: 142 100% 40%;
+    --wizard-pink: 330 100% 70%;
+    
+    --foreground: hsl(262 100% 10%);
+    --card: hsl(0 0% 100%);
+    --border: hsl(262 50% 80%);
+  }
+  
+  .high-contrast.dark {
+    --wizard-purple: 262 100% 75%;
+    --wizard-blue: 217 100% 75%;
+    --wizard-yellow: 34 100% 70%;
+    --wizard-green: 142 100% 50%;
+    --wizard-pink: 330 100% 80%;
+    
+    --foreground: hsl(210 40% 98%);
+    --card: hsl(262 30% 15%);
+    --border: hsl(262 70% 40%);
+  }
+  
+  .text-large {
+    font-size: 1.125rem;
+  }
+  
+  .text-large h1 {
+    font-size: 2.5rem;
+  }
+  
+  .text-large h2 {
+    font-size: 2rem;
+  }
+  
+  .text-large h3 {
+    font-size: 1.75rem;
+  }
+  
+  .text-large .text-sm {
+    font-size: 1rem;
   }
 }
 
@@ -126,7 +185,7 @@
 
 @layer components {
   .puzzle-letter {
-    @apply inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 border-2 border-wizard-purple rounded-lg text-xl md:text-2xl font-bold bg-white shadow-md transition-all duration-300 dark:border-wizard-purple/50 relative;
+    @apply inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 border-2 border-wizard-purple rounded-lg text-xl md:text-2xl font-bold bg-white shadow-md transition-all duration-300 dark:border-wizard-purple/50 dark:bg-gray-800 relative;
   }
   
   .puzzle-letter-correct {
@@ -169,5 +228,236 @@
     background-color: hsla(var(--background));
     background-image: 
       url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  
+  /* Added wizard theme colors as classes for direct use */
+  .text-wizard-purple {
+    color: hsl(var(--wizard-purple));
+  }
+  
+  .text-wizard-blue {
+    color: hsl(var(--wizard-blue));
+  }
+  
+  .text-wizard-yellow {
+    color: hsl(var(--wizard-yellow));
+  }
+  
+  .text-wizard-green {
+    color: hsl(var(--wizard-green));
+  }
+  
+  .text-wizard-pink {
+    color: hsl(var(--wizard-pink));
+  }
+  
+  .bg-wizard-purple {
+    background-color: hsl(var(--wizard-purple));
+  }
+  
+  .bg-wizard-blue {
+    background-color: hsl(var(--wizard-blue));
+  }
+  
+  .bg-wizard-yellow {
+    background-color: hsl(var(--wizard-yellow));
+  }
+  
+  .bg-wizard-green {
+    background-color: hsl(var(--wizard-green));
+  }
+  
+  .bg-wizard-pink {
+    background-color: hsl(var(--wizard-pink));
+  }
+  
+  .border-wizard-purple {
+    border-color: hsl(var(--wizard-purple));
+  }
+  
+  .border-wizard-blue {
+    border-color: hsl(var(--wizard-blue));
+  }
+  
+  .border-wizard-yellow {
+    border-color: hsl(var(--wizard-yellow));
+  }
+  
+  .border-wizard-green {
+    border-color: hsl(var(--wizard-green));
+  }
+  
+  .border-wizard-pink {
+    border-color: hsl(var(--wizard-pink));
+  }
+  
+  .ring-wizard-purple {
+    --tw-ring-color: hsl(var(--wizard-purple));
+  }
+  
+  .ring-wizard-blue {
+    --tw-ring-color: hsl(var(--wizard-blue));
+  }
+  
+  .ring-wizard-yellow {
+    --tw-ring-color: hsl(var(--wizard-yellow));
+  }
+  
+  .ring-wizard-green {
+    --tw-ring-color: hsl(var(--wizard-green));
+  }
+  
+  .ring-wizard-pink {
+    --tw-ring-color: hsl(var(--wizard-pink));
+  }
+}
+
+@keyframes bounce-light {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-5px) rotate(2deg); }
+  75% { transform: translateY(5px) rotate(-2deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-bounce-light {
+  animation: bounce-light 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 6s linear infinite;
+}
+
+.animate-sparkle {
+  animation: pulse-glow 2s ease-in-out 1;
+}
+
+/* Fonts */
+.font-manga {
+  font-family: 'Bangers', system-ui, sans-serif;
+}
+
+.font-anime {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Specialized animations for targeted components */
+.animate-letter-pop {
+  animation: letter-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes letter-pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Added shadow utilities */
+.shadow-wizard {
+  box-shadow: 0 4px 20px -2px rgba(139, 92, 246, 0.3);
+}
+
+.shadow-wizard-hover:hover {
+  box-shadow: 0 8px 30px -2px rgba(139, 92, 246, 0.4);
+}
+
+/* Glass morphism effects */
+.glass-card {
+  @apply bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/30;
+}
+
+/* Card transform hover effect */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Add magical sparkle effect for special elements */
+.magical-sparkle {
+  position: relative;
+  overflow: hidden;
+}
+
+.magical-sparkle::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  transform: rotate(45deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magical-sparkle:hover::after {
+  opacity: 1;
+  animation: magical-sparkle-animation 1.5s ease forwards;
+}
+
+@keyframes magical-sparkle-animation {
+  0% {
+    transform: rotate(45deg) translateY(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: rotate(45deg) translateY(-100%);
+    opacity: 0;
   }
 }

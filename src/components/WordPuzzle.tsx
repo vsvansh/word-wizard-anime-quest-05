@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import AnimeCharacter from './AnimeCharacter';
 import { Sparkles, Zap, X } from 'lucide-react';
 import { getRandomWord } from '@/lib/wordBank';
+import audioManager from '@/lib/audioManager';
 
 interface WordPuzzleProps {
   word?: string;
@@ -34,6 +35,10 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
   const [completed, setCompleted] = useState<boolean>(false);
   const [hintsUsed, setHintsUsed] = useState<number>(0);
   const [hintLetterIndex, setHintLetterIndex] = useState<number | null>(null);
+  const [showHints, setShowHints] = useState(() => {
+    const saved = localStorage.getItem('showHints');
+    return saved ? JSON.parse(saved) : true;
+  });
 
   useEffect(() => {
     if (useRandomWord) {
@@ -53,6 +58,13 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     
     setAttempts(initialAttempts);
   }, [word, maxAttempts]);
+  
+  useEffect(() => {
+    const savedShowHints = localStorage.getItem('showHints');
+    if (savedShowHints !== null) {
+      setShowHints(JSON.parse(savedShowHints));
+    }
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (completed) return;
@@ -60,10 +72,12 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     // Allow only letter keys, backspace, and enter
     if (e.key === 'Backspace') {
       setCurrentAttempt(prev => prev.slice(0, -1));
+      audioManager.playSound('click');
     } else if (e.key === 'Enter') {
       submitGuess();
     } else if (/^[a-zA-Z]$/.test(e.key) && currentAttempt.length < word.length) {
       setCurrentAttempt(prev => prev + e.key.toLowerCase());
+      audioManager.playSound('click');
     }
   };
 
@@ -76,6 +90,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       });
       setCharacterMood('confused');
       setTimeout(() => setCharacterMood('neutral'), 2000);
+      audioManager.playSound('wrong');
       return;
     }
     
@@ -103,6 +118,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     if (isCorrect) {
       setCompleted(true);
       setCharacterMood('excited');
+      audioManager.playSound('win');
       toast({
         title: "Great job!",
         description: "You solved the puzzle! 🎉",
@@ -112,6 +128,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       // Last attempt and incorrect
       setCompleted(true);
       setCharacterMood('confused');
+      audioManager.playSound('wrong');
       toast({
         variant: "destructive",
         title: "Game Over!",
@@ -122,6 +139,18 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       // Incorrect but still have attempts
       setCharacterMood('thinking');
       setTimeout(() => setCharacterMood('neutral'), 2000);
+      
+      // Count correct letters
+      const correctCount = guessResult.filter(letter => letter.state === 'correct').length;
+      const wrongPosCount = guessResult.filter(letter => letter.state === 'wrong-position').length;
+      
+      if (correctCount > 0) {
+        audioManager.playSound('correct');
+      } else if (wrongPosCount > 0) {
+        audioManager.playSound('spell');
+      } else {
+        audioManager.playSound('wrong');
+      }
     }
   };
 
@@ -169,6 +198,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
         title: "No more hints!",
         description: "You've used all your hints for this puzzle."
       });
+      audioManager.playSound('wrong');
       return;
     }
 
@@ -189,7 +219,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       for (let i = 0; i < word.length; i++) {
         if (previousAttempt[i].state !== 'correct') {
           const newAttempt = currentAttempt.padEnd(i, ' ').substring(0, i) + word[i] + 
-                             (currentAttempt.length > i ? currentAttempt.substring(i + 1) : '');
+                           (currentAttempt.length > i ? currentAttempt.substring(i + 1) : '');
           setCurrentAttempt(newAttempt.trim());
           setHintLetterIndex(i);
           break;
@@ -200,6 +230,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     setHintsUsed(prev => prev + 1);
     setCharacterMood('happy');
     setTimeout(() => setCharacterMood('neutral'), 2000);
+    audioManager.playSound('hint');
   };
 
   const handleReset = () => {
@@ -217,6 +248,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     setCompleted(false);
     setHintsUsed(0);
     setHintLetterIndex(null);
+    audioManager.playSound('click');
   };
 
   const renderLetterClassName = (state: LetterState) => {
@@ -268,8 +300,10 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       submitGuess();
     } else if (key === 'backspace') {
       setCurrentAttempt(prev => prev.slice(0, -1));
+      audioManager.playSound('click');
     } else if (currentAttempt.length < word.length) {
       setCurrentAttempt(prev => prev + key);
+      audioManager.playSound('click');
     }
   };
 
@@ -280,16 +314,18 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       onKeyDown={handleKeyDown}
     >
       <div className="flex items-center justify-between mb-4">
-        <Button 
-          variant="outline"
-          size="sm"
-          className="text-wizard-purple border-wizard-purple hover:bg-wizard-purple/10"
-          onClick={useHint}
-          disabled={completed || hintsUsed >= 2}
-        >
-          <Zap className="w-4 h-4 mr-1" />
-          Hint ({2 - hintsUsed} left)
-        </Button>
+        {showHints && (
+          <Button 
+            variant="outline"
+            size="sm"
+            className="text-wizard-purple border-wizard-purple hover:bg-wizard-purple/10"
+            onClick={useHint}
+            disabled={completed || hintsUsed >= 2}
+          >
+            <Zap className="w-4 h-4 mr-1" />
+            Hint ({2 - hintsUsed} left)
+          </Button>
+        )}
         
         <Button 
           variant="outline"
@@ -335,8 +371,8 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
                     key={letterIndex}
                     className={`
                       ${renderLetterClassName(letterObj.state)}
-                      ${showCurrentInput ? 'border-gray-400 bg-gray-50' : ''}
-                      ${isHintLetter ? 'ring-2 ring-wizard-yellow ring-offset-2' : ''}
+                      ${showCurrentInput ? 'border-gray-400 bg-gray-50 dark:bg-gray-700 dark:border-gray-500' : ''}
+                      ${isHintLetter ? 'ring-2 ring-wizard-yellow ring-offset-2 animate-pulse' : ''}
                     `}
                   >
                     {displayLetter}
@@ -359,10 +395,10 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
               const isSpecialKey = key === 'enter' || key === 'backspace';
               const letterState = !isSpecialKey ? getVirtualKeyboardLetterState(key) : 'empty';
               
-              let bgColor = 'bg-gray-200 hover:bg-gray-300';
+              let bgColor = 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600';
               if (letterState === 'correct') bgColor = 'bg-wizard-green text-white';
               else if (letterState === 'wrong-position') bgColor = 'bg-wizard-yellow text-white';
-              else if (letterState === 'incorrect') bgColor = 'bg-gray-400 text-white';
+              else if (letterState === 'incorrect') bgColor = 'bg-gray-400 text-white dark:bg-gray-500';
               
               return (
                 <button
@@ -372,6 +408,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
                     ${bgColor}
                     rounded-md font-medium transition-colors 
                     ${isSpecialKey ? 'px-3 py-3 text-xs' : 'w-8 h-10 text-sm'}
+                    transform hover:scale-105 active:scale-95
                   `}
                   disabled={completed}
                 >
