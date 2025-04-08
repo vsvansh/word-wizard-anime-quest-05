@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import NavBar from '@/components/NavBar';
@@ -12,7 +11,6 @@ import { useTheme } from '@/hooks/useTheme';
 const Index = () => {
   const { theme } = useTheme();
   
-  // Play background music when user interacts with the page
   useEffect(() => {
     const bgMusic = new Audio("https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-668.mp3");
     bgMusic.loop = true;
@@ -37,7 +35,6 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-wizard-purple/10 to-wizard-blue/10 dark:from-wizard-purple/20 dark:to-wizard-blue/20"></div>
         <div className="absolute w-full h-full">
           {theme === 'dark' ? (
-            // Dark mode particles
             <div className="absolute inset-0">
               {Array.from({ length: 50 }).map((_, i) => (
                 <div 
@@ -55,7 +52,6 @@ const Index = () => {
               ))}
             </div>
           ) : (
-            // Light mode particles
             <div className="absolute inset-0">
               {Array.from({ length: 50 }).map((_, i) => (
                 <div 
@@ -79,7 +75,6 @@ const Index = () => {
       <NavBar />
       
       <main className="container max-w-6xl pt-24 pb-12 px-4 md:px-6">
-        {/* Hero Section */}
         <motion.section 
           className="py-10 md:py-16 flex flex-col md:flex-row items-center"
           initial={{ opacity: 0, y: 20 }}
@@ -159,7 +154,6 @@ const Index = () => {
           </motion.div>
         </motion.section>
         
-        {/* Features Section */}
         <motion.section 
           className="py-12 md:py-16"
           initial={{ opacity: 0 }}
@@ -222,7 +216,6 @@ const Index = () => {
           </div>
         </motion.section>
         
-        {/* Daily Challenge Section */}
         <motion.section 
           className="py-12 md:py-16"
           initial={{ opacity: 0 }}
@@ -269,8 +262,7 @@ const Index = () => {
         </div>
       </motion.footer>
 
-      {/* Add keyframes for floating particles */}
-      <style jsx global>{`
+      <style>{`
         @keyframes floatParticle {
           0% {
             transform: translateY(0) translateX(0);

@@ -4,7 +4,7 @@ const wordBank = [
   // Original words
   "anime", "manga", "otaku", "kawaii", "mecha", "sensei", "chibi", "cosplay", "waifu", 
   "senpai", "shonen", "shoujo", "ninja", "kaiju", "sakura", "bento", "kimono", "katana",
-  "geisha", "kabuki", "origami", "samurai", "dragon", "yokai", "onigiri", "ramen", "sushin",
+  "geisha", "kabuki", "origami", "samurai", "dragon", "yokai", "onigiri", "ramen", "sushi",
   "futon", "karate", "bonsai", "miyazaki", "ghibli", "gundam", "pokemon", "naruto", "bleach",
   "titan", "demon", "hero", "piece", "death", "note", "sword", "ghost", "fairy", "magic",
   
@@ -17,7 +17,19 @@ const wordBank = [
   "sailor", "moon", "madoka", "homura", "ryuko", "satsuki", "mako", "kamina", "simon", "yoko",
   "reigen", "mob", "teru", "dimple", "ritsu", "deku", "bakugo", "todoroki", "allmight", "endeavor",
   "makima", "denji", "power", "aki", "kobeni", "violet", "gilbert", "hodgins", "dietfried", "claudia",
-  "marin", "gojo", "jujutsu", "kaisen", "itadori", "megumi", "nobara", "gojo", "sukuna", "mahito"
+  "marin", "gojo", "jujutsu", "kaisen", "itadori", "megumi", "nobara", "gojo", "sukuna", "mahito",
+  
+  // Adding even more anime terms
+  "kamehameha", "rasengan", "chidori", "susanoo", "kyuubi", "avatar", "bender", "airbender",
+  "firebender", "waterbender", "earthbender", "asta", "yuno", "clover", "grimoire", "wizard",
+  "hunter", "nen", "hisoka", "killua", "gon", "kurapika", "leorio", "phantom", "troupe", "eva",
+  "shinji", "rei", "asuka", "angel", "neon", "genesis", "instrumentality", "aincrad", "alfheim",
+  "underworld", "nerve", "gear", "beater", "clearer", "floor", "boss", "trigger", "kill", "matoi",
+  "scissor", "blade", "nudist", "beach", "fiber", "life", "ragyo", "junketsu", "senketsu", "club",
+  "honnouji", "academy", "alchemist", "brotherhood", "philosopher", "stone", "homunculus", "truth",
+  "equivalent", "exchange", "gate", "automail", "metal", "fullmetal", "state", "domain", "expansion",
+  "limitless", "cursed", "technique", "fushiguro", "kugisaki", "yuta", "maki", "panda", "inumaki",
+  "cursed", "energy", "vessel", "boogie", "woogie", "straw", "hat", "pirate", "king", "monkey"
 ];
 
 export const getRandomWord = (): string => {

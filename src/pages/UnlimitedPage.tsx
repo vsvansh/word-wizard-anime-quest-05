@@ -1,4 +1,3 @@
-
 import NavBar from '@/components/NavBar';
 import WordPuzzle from '@/components/WordPuzzle';
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,6 @@ const UnlimitedPage = () => {
   const puzzleRef = useRef<HTMLDivElement>(null);
   const levelUpSoundRef = useRef<HTMLAudioElement | null>(null);
   
-  // Load stats from localStorage on component mount
   useEffect(() => {
     const savedStats = localStorage.getItem('unlimitedStats');
     if (savedStats) {
@@ -37,12 +35,10 @@ const UnlimitedPage = () => {
       }
     }
     
-    // Set up level up sound
     levelUpSoundRef.current = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-magical-coin-win-1936.mp3");
     levelUpSoundRef.current.volume = 0.3;
   }, []);
   
-  // Save stats to localStorage whenever they change
   useEffect(() => {
     const stats = {
       puzzlesSolved,
@@ -66,9 +62,7 @@ const UnlimitedPage = () => {
       setBestStreak(prev => Math.max(prev, currentStreak + 1));
       setExperience(newExperience);
       
-      // Check if level up occurred
       if (newLevel > oldLevel) {
-        // Play level up sound
         if (levelUpSoundRef.current) {
           levelUpSoundRef.current.play().catch(e => console.log("Failed to play level up sound", e));
         }
@@ -104,7 +98,6 @@ const UnlimitedPage = () => {
       variant: "default",
     });
     
-    // Smoothly scroll to puzzle
     if (puzzleRef.current) {
       puzzleRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -121,7 +114,6 @@ const UnlimitedPage = () => {
       variant: "default",
     });
     
-    // Smoothly scroll to puzzle
     if (puzzleRef.current) {
       puzzleRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -136,13 +128,11 @@ const UnlimitedPage = () => {
     });
   };
 
-  // Calculate level based on experience
   const level = Math.floor(experience / 100) + 1;
   const levelProgress = (experience % 100);
   
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Background elements */}
       <div className="fixed inset-0 -z-10 bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-gray-800"></div>
       <div className="fixed inset-0 -z-10 opacity-50">
         <div className="absolute inset-0 overflow-hidden">
@@ -153,12 +143,10 @@ const UnlimitedPage = () => {
               style={{
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
-                transform: 'scale(var(--size, 1))',
-                opacity: 'var(--opacity, 1)',
+                transform: `scale(${Math.random() * 3 + 0.5})`,
+                opacity: `${Math.random() * 0.5 + 0.2}`,
                 animation: `float ${Math.random() * 10 + 10}s ease-in-out infinite, 
                           pulse ${Math.random() * 5 + 2}s ease-in-out infinite`,
-                '--size': Math.random() * 3 + 0.5,
-                '--opacity': Math.random() * 0.5 + 0.2,
               }}
             />
           ))}
@@ -183,7 +171,6 @@ const UnlimitedPage = () => {
             Play as many word puzzles as you want! Skip, get hints, or generate new puzzles whenever you like.
           </p>
           
-          {/* Player Stats Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -294,8 +281,7 @@ const UnlimitedPage = () => {
         </motion.section>
       </main>
 
-      {/* Add keyframes animations */}
-      <style jsx global>{`
+      <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0) translateX(0) scale(var(--size)); }
           25% { transform: translateY(-20px) translateX(10px) scale(var(--size)); }
@@ -305,7 +291,7 @@ const UnlimitedPage = () => {
         
         @keyframes pulse {
           0%, 100% { opacity: var(--opacity); }
-          50% { opacity: var(--opacity) * 1.5; }
+          50% { opacity: calc(var(--opacity) * 1.5); }
         }
       `}</style>
     </div>
