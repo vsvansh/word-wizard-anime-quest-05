@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/card';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Sparkles, RefreshCw, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-import AnimeCharacter from '@/components/AnimeCharacter';
+import AnimeCharacter from '../AnimeCharacter';
 import audioManager from '@/lib/audioManager';
 
 // Simple list of anime-related words

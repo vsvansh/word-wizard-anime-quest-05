@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Russo+One&display=swap');
 
 @tailwind base;
@@ -703,4 +704,6 @@
   bottom: -2px;
   z-index: -1;
   background: linear-gradient(45deg, hsl(var(--wizard-purple)), hsl(var(--wizard-blue)), hsl(var(--wizard-pink)), hsl(var(--wizard-purple)));
-  background-size:
+  background-size: 400% 400%;
+  animation: rotate-border 3s linear infinite;
+}
