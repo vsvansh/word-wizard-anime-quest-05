@@ -5,16 +5,22 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Home, HelpCircle, Award, Menu, X, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Home, HelpCircle, Award, Menu, X, User, Settings, BarChart2, Sun, Moon, Infinity } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { useTheme } from "@/hooks/useTheme";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const location = useLocation();
+  
+  const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b shadow-sm">
       <div className="container flex items-center justify-between h-16 px-4 md:px-6">
         <Link to="/" className="flex items-center space-x-2">
           <div className="relative w-10 h-10">
@@ -27,27 +33,74 @@ const NavBar = () => {
         </Link>
 
         {/* Mobile menu button */}
-        <button 
-          className="md:hidden p-2 rounded-full hover:bg-gray-100"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="rounded-full"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </Button>
+          
+          <button 
+            className="p-2 rounded-full hover:bg-accent hover:text-accent-foreground"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          <Link to="/" className="flex items-center space-x-1 text-foreground hover:text-wizard-purple font-medium transition-colors">
+          <Link 
+            to="/" 
+            className={`flex items-center space-x-1 font-medium transition-colors ${
+              isActive('/') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
+            }`}
+          >
             <Home size={18} />
             <span>Home</span>
           </Link>
-          <Link to="/daily" className="flex items-center space-x-1 text-foreground hover:text-wizard-purple font-medium transition-colors">
+          
+          <Link 
+            to="/daily" 
+            className={`flex items-center space-x-1 font-medium transition-colors ${
+              isActive('/daily') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
+            }`}
+          >
             <Award size={18} />
-            <span>Daily Challenge</span>
+            <span>Daily</span>
           </Link>
-          <Link to="/how-to-play" className="flex items-center space-x-1 text-foreground hover:text-wizard-purple font-medium transition-colors">
+          
+          <Link 
+            to="/unlimited" 
+            className={`flex items-center space-x-1 font-medium transition-colors ${
+              isActive('/unlimited') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
+            }`}
+          >
+            <Infinity size={18} />
+            <span>Unlimited</span>
+          </Link>
+          
+          <Link 
+            to="/how-to-play" 
+            className={`flex items-center space-x-1 font-medium transition-colors ${
+              isActive('/how-to-play') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
+            }`}
+          >
             <HelpCircle size={18} />
             <span>How to Play</span>
           </Link>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="rounded-full"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -56,9 +109,25 @@ const NavBar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Statistics</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/profile" className="flex items-center cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/stats" className="flex items-center cursor-pointer">
+                  <BarChart2 className="mr-2 h-4 w-4" />
+                  <span>Statistics</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/settings" className="flex items-center cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
@@ -66,23 +135,69 @@ const NavBar = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-b">
+        <div className="md:hidden bg-background border-b">
           <nav className="flex flex-col p-4 space-y-3">
-            <Link to="/" className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100" onClick={() => setIsMenuOpen(false)}>
+            <Link 
+              to="/" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
               <Home size={18} />
               <span>Home</span>
             </Link>
-            <Link to="/daily" className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100" onClick={() => setIsMenuOpen(false)}>
+            
+            <Link 
+              to="/daily" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
               <Award size={18} />
               <span>Daily Challenge</span>
             </Link>
-            <Link to="/how-to-play" className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100" onClick={() => setIsMenuOpen(false)}>
+            
+            <Link 
+              to="/unlimited" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Infinity size={18} />
+              <span>Unlimited Play</span>
+            </Link>
+            
+            <Link 
+              to="/how-to-play" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
               <HelpCircle size={18} />
               <span>How to Play</span>
             </Link>
-            <Link to="/profile" className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100" onClick={() => setIsMenuOpen(false)}>
+            
+            <Link 
+              to="/profile" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
               <User size={18} />
               <span>Profile</span>
+            </Link>
+            
+            <Link 
+              to="/stats" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <BarChart2 size={18} />
+              <span>Statistics</span>
+            </Link>
+            
+            <Link 
+              to="/settings" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Settings size={18} />
+              <span>Settings</span>
             </Link>
           </nav>
         </div>
