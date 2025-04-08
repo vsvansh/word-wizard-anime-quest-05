@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import NavBar from '@/components/NavBar';
 import WordPuzzle from '@/components/WordPuzzle';
 import PageHeader from '@/components/unlimited/PageHeader';
@@ -54,6 +54,7 @@ const UnlimitedPage = () => {
     const saved = localStorage.getItem('animatedBackground');
     return saved ? JSON.parse(saved) : true;
   });
+  const [showCorrectWord, setShowCorrectWord] = useState(false);
 
   // Save stats to localStorage whenever they change
   useEffect(() => {
@@ -72,11 +73,16 @@ const UnlimitedPage = () => {
     }
   }, []);
 
-  const handleNewPuzzle = () => {
+  const resetGame = useCallback(() => {
     setCurrentWord(getRandomWord());
     setHintsRemaining(2);
     setShowAnimation(true);
+    setShowCorrectWord(false);
     setTimeout(() => setShowAnimation(false), 500);
+  }, []);
+
+  const handleNewPuzzle = () => {
+    resetGame();
     audioManager.playSound('click');
     
     toast({
@@ -86,18 +92,18 @@ const UnlimitedPage = () => {
   };
 
   const handleSkipPuzzle = () => {
-    setCurrentWord(getRandomWord());
-    setHintsRemaining(2);
-    setShowAnimation(true);
-    setTimeout(() => setShowAnimation(false), 500);
-    setPuzzlesSkipped(prev => prev + 1);
-    setCurrentStreak(0);
-    audioManager.playSound('click');
-    
-    toast({
-      title: "Puzzle Skipped",
-      description: "Moving on to the next challenge."
-    });
+    setShowCorrectWord(true);
+    setTimeout(() => {
+      setPuzzlesSkipped(prev => prev + 1);
+      setCurrentStreak(0);
+      resetGame();
+      audioManager.playSound('click');
+      
+      toast({
+        title: "Puzzle Skipped",
+        description: "Moving on to the next challenge."
+      });
+    }, 2000);
   };
 
   const handleUseHint = () => {
@@ -148,8 +154,14 @@ const UnlimitedPage = () => {
         
         audioManager.playSound('correct');
       }
+      
+      // Get a new word after a short delay
+      setTimeout(() => {
+        resetGame();
+      }, 2000);
     } else {
       setCurrentStreak(0);
+      setShowCorrectWord(true);
       audioManager.playSound('wrong');
       
       toast({
@@ -157,6 +169,11 @@ const UnlimitedPage = () => {
         description: "Don't give up! Try another word.",
         variant: "destructive"
       });
+      
+      // Show the correct word for a moment then reset
+      setTimeout(() => {
+        resetGame();
+      }, 3000);
     }
   };
 
@@ -214,6 +231,22 @@ const UnlimitedPage = () => {
                 />
               </motion.div>
             </div>
+            
+            {showCorrectWord && (
+              <motion.div 
+                className="bg-wizard-purple/10 dark:bg-wizard-purple/20 p-4 text-center"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-sm text-foreground/80">
+                  The correct word was:
+                </p>
+                <p className="text-xl font-bold font-manga tracking-wider bg-gradient-to-r from-wizard-purple to-wizard-blue text-transparent bg-clip-text mt-1">
+                  {currentWord.toUpperCase()}
+                </p>
+              </motion.div>
+            )}
           </Card>
           
           <PuzzleFooter />

@@ -39,6 +39,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     const saved = localStorage.getItem('showHints');
     return saved ? JSON.parse(saved) : true;
   });
+  const [showCorrectWord, setShowCorrectWord] = useState(false);
 
   useEffect(() => {
     if (useRandomWord) {
@@ -128,6 +129,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
       // Last attempt and incorrect
       setCompleted(true);
       setCharacterMood('confused');
+      setShowCorrectWord(true);
       audioManager.playSound('wrong');
       toast({
         variant: "destructive",
@@ -248,6 +250,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     setCompleted(false);
     setHintsUsed(0);
     setHintLetterIndex(null);
+    setShowCorrectWord(false);
     audioManager.playSound('click');
   };
 
@@ -272,7 +275,6 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
     for (const attempt of attempts) {
       for (const letterObj of attempt) {
         if (letterObj.letter.toLowerCase() === letter.toLowerCase()) {
-          // Fixed type comparison issue by explicitly handling each case
           if (letterObj.state === 'correct') {
             return 'correct'; // Return immediately if we find a correct match
           } else if (letterObj.state === 'wrong-position' && highestState !== 'correct') {
@@ -385,6 +387,17 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({
             </div>
           ))}
         </div>
+
+        {showCorrectWord && completed && (
+          <div className="mt-4 bg-wizard-purple/10 dark:bg-wizard-purple/20 p-3 rounded-lg text-center animate-fade-in">
+            <p className="text-sm text-foreground/80">
+              The correct word was:
+            </p>
+            <p className="text-xl font-bold font-manga tracking-wider bg-gradient-to-r from-wizard-purple to-wizard-blue text-transparent bg-clip-text mt-1">
+              {word.toUpperCase()}
+            </p>
+          </div>
+        )}
       </div>
       
       {/* Virtual keyboard */}
