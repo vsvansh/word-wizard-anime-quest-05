@@ -60,6 +60,17 @@ export default {
           pink: "#D946EF",
           green: "#4ADE80",
           yellow: "#FACC15"
+        },
+        // Enhanced palette for puzzle letters
+        emerald: {
+          500: "#10B981",
+          600: "#059669",
+          700: "#047857"
+        },
+        amber: {
+          400: "#FBBF24",
+          500: "#F59E0B",
+          600: "#D97706"
         }
       },
       borderRadius: {

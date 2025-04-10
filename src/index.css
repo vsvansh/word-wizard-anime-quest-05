@@ -159,35 +159,44 @@
   left: 100%;
 }
 
-/* Puzzle Letters */
+/* Puzzle Letters - Enhanced with better color visibility */
 .puzzle-letter {
   @apply w-12 h-12 md:w-14 md:h-14 m-1;
   @apply flex items-center justify-center;
   @apply font-bold text-2xl uppercase;
-  @apply rounded-lg border-2 border-gray-300 dark:border-gray-700;
-  @apply bg-gray-100 dark:bg-gray-800;
+  @apply rounded-lg border-2;
   @apply transition-all duration-300;
   @apply select-none;
+  @apply bg-gray-100 text-gray-800 border-gray-300;
+  @apply dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700;
 }
 
+/* Enhanced contrast for correct letters */
 .puzzle-letter-correct {
-  @apply bg-wizard-green text-white border-wizard-green/50;
+  @apply bg-emerald-500 text-white border-emerald-600;
+  @apply dark:bg-emerald-600 dark:border-emerald-500;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
   animation: pulse-correct 2s infinite;
 }
 
+/* Enhanced contrast for wrong position letters */
 .puzzle-letter-wrong-position {
-  @apply bg-wizard-yellow text-white border-wizard-yellow/50;
+  @apply bg-amber-500 text-white border-amber-600;
+  @apply dark:bg-amber-500 dark:border-amber-400;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
 }
 
+/* Enhanced contrast for incorrect letters */
 .puzzle-letter-incorrect {
-  @apply bg-gray-300 dark:bg-gray-700 text-gray-400 dark:text-gray-500 border-gray-400/30;
+  @apply bg-gray-400 text-gray-700 border-gray-500;
+  @apply dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600;
 }
 
 /* Animations */
 @keyframes pulse-correct {
-  0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
 @keyframes pulse-glow {
@@ -250,4 +259,33 @@
 /* On hover glow effect for elements */
 .hover-glow:hover {
   box-shadow: 0 0 15px rgba(139, 92, 246, 0.7);
+}
+
+/* Keyboard key styling - improved contrast */
+.keyboard-key {
+  @apply rounded-md p-2 md:p-3 m-0.5 font-bold text-sm md:text-base select-none;
+  @apply bg-gray-200 text-gray-800 border border-gray-300;
+  @apply dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600;
+  @apply transition-all duration-150;
+  @apply hover:bg-gray-300 dark:hover:bg-gray-600;
+  @apply active:transform active:scale-95;
+}
+
+/* Improved keyboard key status colors */
+.keyboard-key-correct {
+  @apply bg-emerald-500 text-white border-emerald-600;
+  @apply dark:bg-emerald-600 dark:border-emerald-500;
+  @apply hover:bg-emerald-600 dark:hover:bg-emerald-700;
+}
+
+.keyboard-key-wrong-position {
+  @apply bg-amber-500 text-white border-amber-600;
+  @apply dark:bg-amber-500 dark:border-amber-400;
+  @apply hover:bg-amber-600 dark:hover:bg-amber-600;
+}
+
+.keyboard-key-incorrect {
+  @apply bg-gray-400 text-gray-700 border-gray-500;
+  @apply dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600;
+  @apply hover:bg-gray-500 dark:hover:bg-gray-600;
 }
