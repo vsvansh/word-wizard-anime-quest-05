@@ -1,12 +1,16 @@
 
 // Improved audio manager for game sounds with preloading
 
-type SoundType = 'typing' | 'click' | 'correct' | 'win' | 'wrong';
+type SoundType = 'typing' | 'click' | 'correct' | 'win' | 'wrong' | 'hint' | 'spell';
 
 // Create a class to manage game audio
 class AudioManager {
   private sounds: Record<SoundType, HTMLAudioElement>;
-  private muted: boolean = false;
+  private soundsEnabled: boolean = true;
+  private musicEnabled: boolean = false;
+  private sfxVolume: number = 0.5;
+  private musicVolume: number = 0.3;
+  private backgroundMusic: HTMLAudioElement | null = null;
 
   constructor() {
     // Initialize sound objects with improved sound effects
@@ -15,18 +19,31 @@ class AudioManager {
       click: new Audio('/sounds/click.mp3'),
       correct: new Audio('/sounds/correct.mp3'),
       win: new Audio('/sounds/win.mp3'),
-      wrong: new Audio('/sounds/wrong.mp3')
+      wrong: new Audio('/sounds/wrong.mp3'),
+      hint: new Audio('/sounds/typing.mp3'), // Using typing sound for hint
+      spell: new Audio('/sounds/win.mp3')     // Using win sound for spell
     };
 
     // Set volume for each sound
     Object.values(this.sounds).forEach(sound => {
-      sound.volume = 0.5;
+      sound.volume = this.sfxVolume;
     });
 
+    // Create background music audio element
+    this.backgroundMusic = new Audio('/sounds/typing.mp3'); // Using typing as placeholder
+    this.backgroundMusic.loop = true;
+    this.backgroundMusic.volume = this.musicVolume;
+
     // Check if user has previously muted sounds
-    const savedMuteState = localStorage.getItem('soundsMuted');
-    if (savedMuteState === 'true') {
-      this.muted = true;
+    const savedSoundsState = localStorage.getItem('soundsEnabled');
+    if (savedSoundsState === 'false') {
+      this.soundsEnabled = false;
+    }
+
+    const savedMusicState = localStorage.getItem('musicEnabled');
+    if (savedMusicState === 'true') {
+      this.musicEnabled = true;
+      this.playBackgroundMusic();
     }
     
     // Preload sounds
@@ -38,11 +55,29 @@ class AudioManager {
     Object.values(this.sounds).forEach(sound => {
       sound.load();
     });
+    this.backgroundMusic?.load();
+  }
+
+  // Play background music
+  private playBackgroundMusic(): void {
+    if (this.backgroundMusic && this.musicEnabled) {
+      this.backgroundMusic.play().catch(error => {
+        console.error("Error playing background music:", error);
+      });
+    }
+  }
+
+  // Stop background music
+  private stopBackgroundMusic(): void {
+    if (this.backgroundMusic) {
+      this.backgroundMusic.pause();
+      this.backgroundMusic.currentTime = 0;
+    }
   }
 
   // Play a sound if not muted
   public playSound(type: SoundType): void {
-    if (this.muted) return;
+    if (!this.soundsEnabled) return;
     
     try {
       const sound = this.sounds[type];
@@ -63,25 +98,79 @@ class AudioManager {
     }
   }
 
-  // Mute/unmute all sounds
-  public toggleMute(): boolean {
-    this.muted = !this.muted;
-    localStorage.setItem('soundsMuted', this.muted.toString());
-    return this.muted;
+  // Toggle sound effects
+  public toggleSoundEffects(): boolean {
+    this.soundsEnabled = !this.soundsEnabled;
+    localStorage.setItem('soundsEnabled', this.soundsEnabled.toString());
+    return this.soundsEnabled;
   }
 
-  // Get mute state
-  public isMuted(): boolean {
-    return this.muted;
+  // Toggle background music
+  public toggleBackgroundMusic(): boolean {
+    this.musicEnabled = !this.musicEnabled;
+    localStorage.setItem('musicEnabled', this.musicEnabled.toString());
+    
+    if (this.musicEnabled) {
+      this.playBackgroundMusic();
+    } else {
+      this.stopBackgroundMusic();
+    }
+    
+    return this.musicEnabled;
   }
 
-  // Set volume for all sounds (0.0 to 1.0)
+  // Check if sound effects are enabled
+  public areSoundEffectsEnabled(): boolean {
+    return this.soundsEnabled;
+  }
+
+  // Check if music is playing
+  public isMusicPlaying(): boolean {
+    return this.musicEnabled;
+  }
+
+  // Set volume for all sound effects
   public setVolume(volume: number): void {
     const clampedVolume = Math.max(0, Math.min(1, volume));
+    this.sfxVolume = clampedVolume;
     
     Object.values(this.sounds).forEach(sound => {
       sound.volume = clampedVolume;
     });
+  }
+
+  // Set volume specifically for sound effects
+  public setSFXVolume(volume: number): void {
+    const clampedVolume = Math.max(0, Math.min(1, volume));
+    this.sfxVolume = clampedVolume;
+    
+    Object.values(this.sounds).forEach(sound => {
+      sound.volume = clampedVolume;
+    });
+    
+    localStorage.setItem('sfxVolume', clampedVolume.toString());
+  }
+
+  // Set volume specifically for music
+  public setMusicVolume(volume: number): void {
+    const clampedVolume = Math.max(0, Math.min(1, volume));
+    this.musicVolume = clampedVolume;
+    
+    if (this.backgroundMusic) {
+      this.backgroundMusic.volume = clampedVolume;
+    }
+    
+    localStorage.setItem('musicVolume', clampedVolume.toString());
+  }
+
+  // Get the current SFX volume
+  public getSFXVolume(): number {
+    return this.sfxVolume;
+  }
+
+  // Get the current music volume
+  public getMusicVolume(): number {
+    return this.musicVolume;
   }
 }
 

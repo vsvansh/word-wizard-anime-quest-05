@@ -104,7 +104,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
         </div>
       ))}
       
-      <style jsx>{`
+      <style jsx global>{`
         .key-button {
           min-width: 36px;
           transition: all 0.2s;

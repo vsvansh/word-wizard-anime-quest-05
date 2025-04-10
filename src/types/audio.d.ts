@@ -4,8 +4,8 @@ declare type SoundType = 'click' | 'typing' | 'correct' | 'win' | 'wrong' | 'hin
 interface AudioManager {
   playSound: (type: SoundType) => void;
   setVolume: (volume: number) => void;
-  toggleSoundEffects: () => void;
-  toggleBackgroundMusic: () => void;
+  toggleSoundEffects: () => boolean;
+  toggleBackgroundMusic: () => boolean;
   setMusicVolume: (volume: number) => void;
   setSFXVolume: (volume: number) => void;
   getSFXVolume: () => number;
