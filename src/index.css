@@ -38,6 +38,15 @@
     --ring: 240 4.9% 83.9%;
  
     --radius: 0.75rem;
+    
+    /* Game color variables */
+    --correct-bg: 142 76% 36%;
+    --correct-border: 142 76% 46%;
+    --wrong-position-bg: 38 92% 50%;
+    --wrong-position-border: 38 92% 60%;
+    --incorrect-bg: 220 14% 80%;
+    --incorrect-text: 220 10% 20%;
+    --incorrect-border: 220 14% 70%;
   }
  
   .light {
@@ -68,6 +77,15 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
+    
+    /* Light mode game color variables */
+    --correct-bg: 142 70% 45%;
+    --correct-border: 142 70% 35%;
+    --wrong-position-bg: 38 92% 50%;
+    --wrong-position-border: 38 92% 40%;
+    --incorrect-bg: 220 14% 90%;
+    --incorrect-text: 220 10% 20%;
+    --incorrect-border: 220 14% 80%;
   }
 }
  
@@ -173,23 +191,26 @@
 
 /* Enhanced contrast for correct letters */
 .puzzle-letter-correct {
-  @apply bg-emerald-500 text-white border-emerald-600;
-  @apply dark:bg-emerald-600 dark:border-emerald-500;
+  background-color: hsl(var(--correct-bg));
+  border-color: hsl(var(--correct-border));
+  @apply text-white;
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
   animation: pulse-correct 2s infinite;
 }
 
 /* Enhanced contrast for wrong position letters */
 .puzzle-letter-wrong-position {
-  @apply bg-amber-500 text-white border-amber-600;
-  @apply dark:bg-amber-500 dark:border-amber-400;
+  background-color: hsl(var(--wrong-position-bg));
+  border-color: hsl(var(--wrong-position-border));
+  @apply text-white;
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
 }
 
 /* Enhanced contrast for incorrect letters */
 .puzzle-letter-incorrect {
-  @apply bg-gray-400 text-gray-700 border-gray-500;
-  @apply dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600;
+  background-color: hsl(var(--incorrect-bg));
+  color: hsl(var(--incorrect-text));
+  border-color: hsl(var(--incorrect-border));
 }
 
 /* Animations */
@@ -273,19 +294,22 @@
 
 /* Improved keyboard key status colors */
 .keyboard-key-correct {
-  @apply bg-emerald-500 text-white border-emerald-600;
-  @apply dark:bg-emerald-600 dark:border-emerald-500;
+  background-color: hsl(var(--correct-bg));
+  border-color: hsl(var(--correct-border));
+  @apply text-white;
   @apply hover:bg-emerald-600 dark:hover:bg-emerald-700;
 }
 
 .keyboard-key-wrong-position {
-  @apply bg-amber-500 text-white border-amber-600;
-  @apply dark:bg-amber-500 dark:border-amber-400;
+  background-color: hsl(var(--wrong-position-bg));
+  border-color: hsl(var(--wrong-position-border));
+  @apply text-white;
   @apply hover:bg-amber-600 dark:hover:bg-amber-600;
 }
 
 .keyboard-key-incorrect {
-  @apply bg-gray-400 text-gray-700 border-gray-500;
-  @apply dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600;
+  background-color: hsl(var(--incorrect-bg));
+  color: hsl(var(--incorrect-text));
+  border-color: hsl(var(--incorrect-border));
   @apply hover:bg-gray-500 dark:hover:bg-gray-600;
 }

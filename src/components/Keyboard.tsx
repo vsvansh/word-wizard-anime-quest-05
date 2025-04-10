@@ -104,7 +104,8 @@ const Keyboard: React.FC<KeyboardProps> = ({
         </div>
       ))}
       
-      <style jsx global>{`
+      <style>
+        {`
         .key-button {
           min-width: 36px;
           transition: all 0.2s;
@@ -121,7 +122,8 @@ const Keyboard: React.FC<KeyboardProps> = ({
             margin: 0 2px;
           }
         }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };

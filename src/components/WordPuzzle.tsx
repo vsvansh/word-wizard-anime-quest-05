@@ -134,11 +134,11 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
       const status = evaluations[rowIndex][cellIndex].status;
       switch (status) {
         case 'correct':
-          return 'bg-wizard-green text-white';
+          return 'puzzle-letter-correct';
         case 'wrong-position':
-          return 'bg-wizard-yellow text-white';
+          return 'puzzle-letter-wrong-position';
         case 'incorrect':
-          return 'bg-gray-300 dark:bg-gray-700 text-gray-200';
+          return 'puzzle-letter-incorrect';
         default:
           return '';
       }
