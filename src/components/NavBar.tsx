@@ -8,16 +8,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Home, HelpCircle, Award, Menu, X, User, Settings, BarChart2, Sun, Moon, Infinity } from "lucide-react";
+import { 
+  Home, HelpCircle, Award, Menu, X, User, Settings, 
+  BarChart2, Sun, Moon, Infinity, Gamepad2, Volume2, VolumeX 
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
+import audioManager from "@/lib/audioManager";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(() => audioManager.areSoundEffectsEnabled());
   const { theme, setTheme } = useTheme();
   const location = useLocation();
   
   const isActive = (path: string) => location.pathname === path;
+  
+  const toggleSound = () => {
+    const newState = audioManager.toggleSoundEffects();
+    setSoundEnabled(newState);
+    if (newState) {
+      audioManager.playSound('click');
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b shadow-sm">
@@ -34,6 +47,15 @@ const NavBar = () => {
 
         {/* Mobile menu button */}
         <div className="flex items-center gap-2 md:hidden">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleSound}
+            className="rounded-full"
+          >
+            {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </Button>
+          
           <Button 
             variant="ghost" 
             size="icon" 
@@ -84,6 +106,16 @@ const NavBar = () => {
           </Link>
           
           <Link 
+            to="/minigames" 
+            className={`flex items-center space-x-1 font-medium transition-colors ${
+              isActive('/minigames') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
+            }`}
+          >
+            <Gamepad2 size={18} />
+            <span>Minigames</span>
+          </Link>
+          
+          <Link 
             to="/how-to-play" 
             className={`flex items-center space-x-1 font-medium transition-colors ${
               isActive('/how-to-play') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
@@ -92,6 +124,16 @@ const NavBar = () => {
             <HelpCircle size={18} />
             <span>How to Play</span>
           </Link>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleSound}
+            className="rounded-full"
+            title={soundEnabled ? "Mute Sound" : "Unmute Sound"}
+          >
+            {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </Button>
           
           <Button 
             variant="ghost" 
@@ -162,6 +204,15 @@ const NavBar = () => {
             >
               <Infinity size={18} />
               <span>Unlimited Play</span>
+            </Link>
+            
+            <Link 
+              to="/minigames" 
+              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Gamepad2 size={18} />
+              <span>Minigames</span>
             </Link>
             
             <Link 

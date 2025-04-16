@@ -1,343 +1,182 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
  
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
  
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 222.2 84% 4.9%;
  
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --radius: 0.5rem;
+
+    /* Custom Wizard Colors */
+    --wizard-purple: #8b5cf6;
+    --wizard-blue: #38bdf8;
+    --wizard-pink: #f472b6;
+    --wizard-yellow: #fde047;
+    --wizard-green: #22c55e;
+
+    /* Word puzzle variables - updated for better visibility in light mode */
+    --puzzle-letter-border: #d1d5db;
+    --puzzle-letter-correct: #16a34a;
+    --puzzle-letter-correct-border: #15803d;
+    --puzzle-letter-wrong-position: #eab308;
+    --puzzle-letter-wrong-position-border: #ca8a04;
+    --puzzle-letter-incorrect: #9ca3af;
+    --puzzle-letter-incorrect-border: #6b7280;
+  }
  
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
  
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+ 
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+ 
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+ 
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+ 
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
  
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 210 40% 98%;
  
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --ring: 217.2 32.6% 17.5%;
  
-    --radius: 0.75rem;
-    
-    /* Enhanced Game color variables for dark mode - Wordle-like */
-    --correct-bg: 115 70% 40%;
-    --correct-border: 115 70% 50%;
-    --wrong-position-bg: 40 100% 50%;
-    --wrong-position-border: 40 100% 60%;
-    --incorrect-bg: 220 10% 30%;
-    --incorrect-text: 220 10% 90%;
-    --incorrect-border: 220 10% 40%;
-  }
- 
-  .light {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
- 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
- 
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
- 
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
- 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
- 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    
-    /* Enhanced Game color variables for light mode - Wordle-like */
-    --correct-bg: 115 55% 45%;
-    --correct-border: 115 55% 35%;
-    --wrong-position-bg: 45 95% 52%;
-    --wrong-position-border: 45 95% 42%;
-    --incorrect-bg: 210 15% 85%;
-    --incorrect-text: 210 15% 25%;
-    --incorrect-border: 210 15% 75%;
-  }
-}
- 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Rubik', sans-serif;
+    --radius: 0.5rem;
+
+    /* Custom Wizard Colors */
+    --wizard-purple: #8b5cf6;
+    --wizard-blue: #38bdf8;
+    --wizard-pink: #f472b6;
+    --wizard-yellow: #fde047;
+    --wizard-green: #22c55e;
+
+    /* Word puzzle variables - updated for better visibility in dark mode */
+    --puzzle-letter-border: #4b5563;
+    --puzzle-letter-correct: #22c55e;
+    --puzzle-letter-correct-border: #16a34a;
+    --puzzle-letter-wrong-position: #facc15;
+    --puzzle-letter-wrong-position-border: #eab308;
+    --puzzle-letter-incorrect: #6b7280;
+    --puzzle-letter-incorrect-border: #4b5563;
   }
 }
 
-/* Game Fonts */
-.font-game {
-  font-family: 'Press Start 2P', cursive;
-  letter-spacing: 0.05em;
+@layer components {
+  /* Improved puzzle letter styling */
+  .puzzle-letter {
+    @apply flex items-center justify-center w-12 h-12 text-xl font-bold border-2 
+           border-solid border-gray-300 dark:border-gray-600 rounded-lg transition-all 
+           select-none relative;
+  }
+
+  .puzzle-letter-correct {
+    @apply bg-wizard-green border-wizard-green/80 text-white dark:text-white;
+    animation: flip-in 0.6s ease forwards;
+  }
+
+  .puzzle-letter-wrong-position {
+    @apply bg-wizard-yellow border-wizard-yellow/80 text-white dark:text-white;
+    animation: flip-in 0.6s ease forwards;
+  }
+
+  .puzzle-letter-incorrect {
+    @apply bg-gray-400 dark:bg-gray-700 border-gray-400 dark:border-gray-600 text-white dark:text-gray-300;
+    animation: flip-in 0.6s ease forwards;
+  }
+
+  .puzzle-letter-flip {
+    animation: flip-in 0.6s ease forwards;
+  }
+
+  /* Improve keyboard styling */
+  .keyboard-key {
+    @apply h-12 md:h-14 flex-1 flex items-center justify-center rounded-md font-medium text-sm md:text-base
+           bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 
+           hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors
+           active:scale-95 transform duration-100 select-none border border-gray-300 dark:border-gray-700;
+  }
+
+  .anime-card {
+    @apply bg-white/90 dark:bg-gray-900/90 rounded-xl p-4 shadow-xl backdrop-blur-sm;
+  }
+
+  /* Animation for letter flipping */
+  @keyframes flip-in {
+    0% {
+      transform: rotateX(0);
+    }
+    50% {
+      transform: rotateX(90deg);
+    }
+    100% {
+      transform: rotateX(0);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 rgba(139, 92, 246, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+  }
+
+  .character {
+    @apply relative w-12 h-12 p-2 rounded-full;
+  }
+
+  .character-emoji {
+    @apply text-xl;
+  }
 }
 
 .font-manga {
-  font-family: 'Bungee', cursive;
-  letter-spacing: 0.05em;
+  font-family: 'Comic Sans MS', 'Comic Neue', sans-serif;
+  font-weight: 700;
 }
-
-/* Neon effects */
-.neon-text {
-  text-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 
-               0 0 10px rgba(139, 92, 246, 0.5), 
-               0 0 15px rgba(139, 92, 246, 0.5);
-}
-
-.neon-box {
-  box-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 
-              0 0 10px rgba(139, 92, 246, 0.5), 
-              inset 0 0 5px rgba(139, 92, 246, 0.3);
-}
-
-.neon-border {
-  border: 2px solid rgba(139, 92, 246, 0.8);
-  box-shadow: 0 0 5px rgba(139, 92, 246, 0.5),
-              0 0 10px rgba(139, 92, 246, 0.3),
-              inset 0 0 2px rgba(139, 92, 246, 0.3);
-}
-
-/* Anime Card */
-.anime-card {
-  @apply bg-gradient-to-b from-background/70 to-background;
-  @apply border-2 border-wizard-purple/30;
-  @apply shadow-lg shadow-wizard-purple/10;
-  @apply backdrop-blur-sm;
-  @apply transition-all duration-300;
-}
-
-.anime-card:hover {
-  @apply border-wizard-purple/50 shadow-wizard-purple/20;
-  transform: translateY(-3px);
-}
-
-/* Button styling */
-.btn-anime {
-  @apply bg-gradient-to-r from-wizard-purple to-wizard-blue;
-  @apply text-white font-bold;
-  @apply shadow-md shadow-wizard-purple/20;
-  @apply transition-all duration-300;
-  @apply relative overflow-hidden;
-}
-
-.btn-anime:hover {
-  @apply shadow-lg shadow-wizard-purple/40;
-  transform: translateY(-2px);
-}
-
-.btn-anime:active {
-  transform: translateY(1px);
-}
-
-.btn-anime::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-  transition: all 0.5s;
-}
-
-.btn-anime:hover::after {
-  left: 100%;
-}
-
-/* Puzzle Letters - Enhanced with better color visibility */
-.puzzle-letter {
-  @apply w-12 h-12 md:w-14 md:h-14 m-1;
-  @apply flex items-center justify-center;
-  @apply font-bold text-2xl uppercase;
-  @apply rounded-lg border-2;
-  @apply transition-all duration-300;
-  @apply select-none;
-  @apply bg-gray-100 text-gray-800 border-gray-300;
-  @apply dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-}
-
-/* Enhanced Wordle-style animations and colors */
-.puzzle-letter-correct {
-  background-color: hsl(var(--correct-bg));
-  border-color: hsl(var(--correct-border));
-  @apply text-white;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
-  animation: flip-correct 0.6s ease forwards;
-}
-
-/* Enhanced contrast for wrong position letters */
-.puzzle-letter-wrong-position {
-  background-color: hsl(var(--wrong-position-bg));
-  border-color: hsl(var(--wrong-position-border));
-  @apply text-white;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
-  animation: flip-wrong-position 0.6s ease forwards;
-}
-
-/* Enhanced contrast for incorrect letters */
-.puzzle-letter-incorrect {
-  background-color: hsl(var(--incorrect-bg));
-  color: hsl(var(--incorrect-text));
-  border-color: hsl(var(--incorrect-border));
-  animation: flip-incorrect 0.6s ease forwards;
-}
-
-/* Animations */
-@keyframes flip-correct {
-  0% { transform: rotateX(0); background-color: transparent; }
-  50% { transform: rotateX(90deg); }
-  100% { transform: rotateX(0); background-color: hsl(var(--correct-bg)); }
-}
-
-@keyframes flip-wrong-position {
-  0% { transform: rotateX(0); background-color: transparent; }
-  50% { transform: rotateX(90deg); }
-  100% { transform: rotateX(0); background-color: hsl(var(--wrong-position-bg)); }
-}
-
-@keyframes flip-incorrect {
-  0% { transform: rotateX(0); background-color: transparent; }
-  50% { transform: rotateX(90deg); }
-  100% { transform: rotateX(0); background-color: hsl(var(--incorrect-bg)); }
-}
-
-@keyframes pulse-correct {
-  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-@keyframes pulse-glow {
-  0% { opacity: 0.7; }
-  50% { opacity: 1; }
-  100% { opacity: 0.7; }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
-}
-
-@keyframes bounce-light {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s infinite;
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.animate-wiggle {
-  animation: wiggle 1s ease-in-out infinite;
-}
-
-.animate-bounce-light {
-  animation: bounce-light 2s ease-in-out infinite;
-}
-
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
-}
-
-/* Dark mode overrides */
-.dark .anime-card {
-  background: linear-gradient(to bottom, rgba(30, 30, 46, 0.8), rgba(17, 17, 27, 0.9));
-}
-
-/* Rotate animation for Y axis */
-.rotate-y-180 {
-  transform: rotateY(180deg);
-}
-
-/* On hover glow effect for elements */
-.hover-glow:hover {
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.7);
-}
-
-/* Keyboard key styling - improved contrast */
-.keyboard-key {
-  @apply rounded-md p-2 md:p-3 m-0.5 font-bold text-sm md:text-base select-none;
-  @apply bg-gray-200 text-gray-800 border border-gray-300;
-  @apply dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600;
-  @apply transition-all duration-150;
-  @apply hover:bg-gray-300 dark:hover:bg-gray-600;
-  @apply active:transform active:scale-95;
-}
-
-/* Improved keyboard key status colors */
-.keyboard-key-correct {
-  background-color: hsl(var(--correct-bg));
-  border-color: hsl(var(--correct-border));
-  @apply text-white;
-  @apply hover:bg-emerald-600 dark:hover:bg-emerald-700;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
-}
-
-.keyboard-key-wrong-position {
-  background-color: hsl(var(--wrong-position-bg));
-  border-color: hsl(var(--wrong-position-border));
-  @apply text-white;
-  @apply hover:bg-amber-600 dark:hover:bg-amber-600;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
-}
-
-.keyboard-key-incorrect {
-  background-color: hsl(var(--incorrect-bg));
-  color: hsl(var(--incorrect-text));
-  border-color: hsl(var(--incorrect-border));
-  @apply hover:bg-gray-500 dark:hover:bg-gray-600;
-  opacity: 0.8;
-}
-

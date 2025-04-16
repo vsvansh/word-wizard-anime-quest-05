@@ -5,15 +5,16 @@ import PageHeader from '@/components/unlimited/PageHeader';
 import ActionButtons from '@/components/unlimited/ActionButtons';
 import StatsCard from '@/components/unlimited/StatsCard';
 import PuzzleFooter from '@/components/unlimited/PuzzleFooter';
-import MinigamesSection from '@/components/unlimited/MinigamesSection';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast";
 import { getRandomWord } from '@/lib/wordBank';
 import audioManager from '@/lib/audioManager';
 import PageFooter from '@/components/PageFooter';
 import ParticleBackground from '@/components/ParticleBackground';
-import { Award, Trophy, Sparkles, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Award, Trophy, Sparkles, Star, Gamepad2 } from 'lucide-react';
 
 const UnlimitedPage = () => {
   // Get saved stats or initialize with default values
@@ -235,28 +236,6 @@ const UnlimitedPage = () => {
     }
   };
 
-  const handleXpEarned = (amount: number) => {
-    // Update experience and check for level up
-    const newExp = experience + amount;
-    setExperience(newExp);
-    
-    if (newExp >= level * 100) {
-      setLevel(prev => prev + 1);
-      setShowLevelUpAnimation(true);
-      
-      toast({
-        title: `Level Up! You're now level ${level + 1}`,
-        description: `Congratulations! You gained XP from minigames.`,
-      });
-      
-      audioManager.playSound('win');
-      
-      setTimeout(() => {
-        setShowLevelUpAnimation(false);
-      }, 3000);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {animatedBackground && <ParticleBackground />}
@@ -363,10 +342,12 @@ const UnlimitedPage = () => {
                         <span>{achievementCount} Achievements</span>
                       </div>
                       
-                      <WordPuzzle 
-                        word={currentWord} 
-                        onComplete={handlePuzzleComplete} 
-                      />
+                      <div className="p-2 md:p-4 flex justify-center items-center">
+                        <WordPuzzle 
+                          word={currentWord} 
+                          onComplete={handlePuzzleComplete} 
+                        />
+                      </div>
                     </motion.div>
                   </AnimatePresence>
                 </div>
@@ -396,7 +377,43 @@ const UnlimitedPage = () => {
           </div>
           
           <div className="space-y-6">
-            <MinigamesSection onXpEarned={handleXpEarned} />
+            {/* Minigames Promo */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <Card className="anime-card border-wizard-pink/30 p-6 hover:border-wizard-pink/50 transition-all">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center">
+                    <Gamepad2 className="h-5 w-5 mr-2 text-wizard-pink" />
+                    <h3 className="text-xl font-manga bg-gradient-to-r from-wizard-pink to-wizard-purple text-transparent bg-clip-text">
+                      Word Wizard Minigames
+                    </h3>
+                  </div>
+                </div>
+                <p className="text-sm text-foreground/70 mb-4">
+                  Challenge your word skills with our collection of anime-themed minigames! Earn XP, compete for high scores, and unlock achievements.
+                </p>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="bg-wizard-purple/10 p-2 rounded-md text-center">
+                    <p className="text-xs text-foreground/70">Scramble</p>
+                  </div>
+                  <div className="bg-wizard-blue/10 p-2 rounded-md text-center">
+                    <p className="text-xs text-foreground/70">Speed Type</p>
+                  </div>
+                  <div className="bg-wizard-pink/10 p-2 rounded-md text-center">
+                    <p className="text-xs text-foreground/70">Memory</p>
+                  </div>
+                  <div className="bg-wizard-green/10 p-2 rounded-md text-center">
+                    <p className="text-xs text-foreground/70">Word Search</p>
+                  </div>
+                </div>
+                <Button asChild className="w-full bg-wizard-pink hover:bg-wizard-pink/90">
+                  <Link to="/minigames">Play Minigames</Link>
+                </Button>
+              </Card>
+            </motion.div>
             
             {/* Word Wizards Leaderboard */}
             <motion.div 
