@@ -1,5 +1,5 @@
 
-declare type SoundType = 'click' | 'typing' | 'correct' | 'win' | 'wrong' | 'hint' | 'spell';
+declare type SoundType = 'typing' | 'click' | 'correct' | 'win' | 'wrong' | 'hint' | 'spell';
 
 interface AudioManager {
   playSound: (type: SoundType) => void;

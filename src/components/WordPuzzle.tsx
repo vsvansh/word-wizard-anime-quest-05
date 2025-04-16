@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Key } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import Keyboard from './Keyboard';
 import { evaluateGuess } from '@/lib/gameLogic';
 import ConfettiExplosion from './ConfettiExplosion';
 import audioManager from '@/lib/audioManager';
+import SoundControls from './SoundControls';
 
 interface WordPuzzleProps {
   word?: string;
@@ -30,6 +32,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
   const [showDefinition, setShowDefinition] = useState(false);
   const [guessedCorrectly, setGuessedCorrectly] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showSoundControls, setShowSoundControls] = useState(false);
   const currentRow = useRef(0);
   const { toast } = useToast();
 
@@ -89,6 +92,16 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
     if (guessedCorrectly) {
       setShowConfetti(true);
       audioManager.playSound('win');
+    } else {
+      // Play different sounds based on how many correct letters they have
+      const correctCount = evaluation.filter(cell => cell.status === 'correct').length;
+      const partialCount = evaluation.filter(cell => cell.status === 'wrong-position').length;
+      
+      if (correctCount > 0 || partialCount > 0) {
+        audioManager.playSound('correct');
+      } else {
+        audioManager.playSound('wrong');
+      }
     }
 
     handleKeyPress(guess);
@@ -164,7 +177,24 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
         origin="center"
       />
 
-      <AnimeCharacter mood={gameStatus === 'won' ? 'happy' : gameStatus === 'lost' ? 'confused' : 'neutral'} />
+      <div className="flex justify-between w-full items-center mb-2">
+        <AnimeCharacter mood={gameStatus === 'won' ? 'happy' : gameStatus === 'lost' ? 'confused' : 'neutral'} />
+        
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-8 w-8 p-0 rounded-full"
+          onClick={() => setShowSoundControls(!showSoundControls)}
+        >
+          <Key className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      {showSoundControls && (
+        <div className="w-full max-w-xs mb-4">
+          <SoundControls />
+        </div>
+      )}
 
       <div className="space-y-3 mb-6">
         {guesses.map((guess, rowIndex) => (
@@ -237,6 +267,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
                 title: gameStatus === 'won' ? "Let's play again!" : "Try again!",
                 description: "A new challenge awaits you.",
               });
+              audioManager.playSound('click');
             }}
             className="mt-4 bg-wizard-purple hover:bg-wizard-purple/90 animate-pulse-glow"
           >
