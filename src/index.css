@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,32 +20,32 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 270 76% 60%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 260 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
  
-    --accent: 210 40% 96.1%;
+    --accent: 260 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --ring: 222.2 84% 4.9%;
+    --ring: 270 76% 60%;
  
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Custom Wizard Colors */
-    --wizard-purple: #8b5cf6;
+    /* Custom Wizard Colors - Enhanced for anime theme */
+    --wizard-purple: #9b87f5;
     --wizard-blue: #38bdf8;
     --wizard-pink: #f472b6;
     --wizard-yellow: #fde047;
     --wizard-green: #22c55e;
 
-    /* Word puzzle variables - updated for better visibility in light mode */
+    /* Word puzzle variables - with enhanced colors for light mode */
     --puzzle-letter-border: #d1d5db;
-    --puzzle-letter-correct: #16a34a;
+    --puzzle-letter-correct: #22c55e;
     --puzzle-letter-correct-border: #15803d;
     --puzzle-letter-wrong-position: #eab308;
     --puzzle-letter-wrong-position-border: #ca8a04;
@@ -68,8 +69,8 @@
     --border: 216 34% 17%;
     --input: 216 34% 17%;
  
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
+    --primary: 270 76% 60%;
+    --primary-foreground: 210 40% 98%;
  
     --secondary: 222.2 47.4% 11.2%;
     --secondary-foreground: 210 40% 98%;
@@ -80,18 +81,18 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
  
-    --ring: 217.2 32.6% 17.5%;
+    --ring: 270 76% 60%;
  
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Custom Wizard Colors */
-    --wizard-purple: #8b5cf6;
+    /* Custom Wizard Colors - Enhanced for anime theme */
+    --wizard-purple: #9b87f5;
     --wizard-blue: #38bdf8;
     --wizard-pink: #f472b6;
     --wizard-yellow: #fde047;
     --wizard-green: #22c55e;
 
-    /* Word puzzle variables - updated for better visibility in dark mode */
+    /* Word puzzle variables - with enhanced colors for dark mode */
     --puzzle-letter-border: #4b5563;
     --puzzle-letter-correct: #22c55e;
     --puzzle-letter-correct-border: #16a34a;
@@ -103,20 +104,20 @@
 }
 
 @layer components {
-  /* Improved puzzle letter styling */
+  /* Improved puzzle letter styling with anime-themed aesthetics */
   .puzzle-letter {
     @apply flex items-center justify-center w-12 h-12 text-xl font-bold border-2 
            border-solid border-gray-300 dark:border-gray-600 rounded-lg transition-all 
-           select-none relative;
+           select-none relative shadow-md;
   }
 
   .puzzle-letter-correct {
-    @apply bg-wizard-green border-wizard-green/80 text-white dark:text-white;
+    @apply bg-wizard-green border-wizard-green/80 text-white dark:text-white shadow-lg;
     animation: flip-in 0.6s ease forwards;
   }
 
   .puzzle-letter-wrong-position {
-    @apply bg-wizard-yellow border-wizard-yellow/80 text-white dark:text-white;
+    @apply bg-wizard-yellow border-wizard-yellow/80 text-white dark:text-white shadow-lg;
     animation: flip-in 0.6s ease forwards;
   }
 
@@ -129,16 +130,18 @@
     animation: flip-in 0.6s ease forwards;
   }
 
-  /* Improve keyboard styling */
+  /* Enhanced keyboard styling with anime theme */
   .keyboard-key {
     @apply h-12 md:h-14 flex-1 flex items-center justify-center rounded-md font-medium text-sm md:text-base
            bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 
            hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors
-           active:scale-95 transform duration-100 select-none border border-gray-300 dark:border-gray-700;
+           active:scale-95 transform duration-100 select-none border border-gray-300 dark:border-gray-700
+           shadow-sm hover:shadow-md;
   }
 
   .anime-card {
-    @apply bg-white/90 dark:bg-gray-900/90 rounded-xl p-4 shadow-xl backdrop-blur-sm;
+    @apply bg-gradient-to-br from-white/90 to-purple-50/90 dark:from-gray-900/90 dark:to-purple-950/90 
+           rounded-xl p-4 shadow-xl backdrop-blur-sm border border-purple-100 dark:border-purple-900;
   }
 
   /* Animation for letter flipping */
@@ -174,9 +177,31 @@
   .character-emoji {
     @apply text-xl;
   }
+  
+  /* Enhanced anime-themed UI components */
+  .anime-button {
+    @apply bg-gradient-to-br from-wizard-purple to-wizard-blue text-white font-medium py-2 px-4 
+           rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1;
+  }
+  
+  .anime-input {
+    @apply bg-white dark:bg-gray-800 border-2 border-wizard-purple/20 focus:border-wizard-purple 
+           rounded-lg px-4 py-2 outline-none transition-all duration-300 shadow-sm focus:shadow-md;
+  }
 }
 
 .font-manga {
-  font-family: 'Comic Sans MS', 'Comic Neue', sans-serif;
+  font-family: 'Comic Sans MS', 'Comic Neue', cursive;
   font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Add some anime-specific styles */
+.neon-text {
+  text-shadow: 0 0 5px var(--wizard-purple), 0 0 10px var(--wizard-purple);
+}
+
+.anime-bg {
+  background-image: radial-gradient(circle at top right, rgba(155, 135, 245, 0.15), transparent 70%),
+                    radial-gradient(circle at bottom left, rgba(244, 114, 182, 0.15), transparent 70%);
 }

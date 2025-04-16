@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -12,7 +13,7 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #9b87f5aa);
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
@@ -35,8 +36,39 @@
 
 .card {
   padding: 2em;
+  border-radius: var(--radius);
+  background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(155,135,245,0.05));
+  border: 1px solid rgba(155,135,245,0.1);
+  backdrop-filter: blur(10px);
 }
 
 .read-the-docs {
   color: #888;
+  font-family: 'Comic Sans MS', 'Comic Neue', cursive;
+}
+
+/* Anime-themed scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(155, 135, 245, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(155, 135, 245, 0.6);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(155, 135, 245, 0.8);
+}
+
+/* Anime-themed selection */
+::selection {
+  background: rgba(155, 135, 245, 0.3);
+  color: inherit;
 }

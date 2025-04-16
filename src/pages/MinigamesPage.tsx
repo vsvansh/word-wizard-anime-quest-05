@@ -2,7 +2,7 @@
 import React from 'react';
 import NavBar from '@/components/NavBar';
 import { motion } from 'framer-motion';
-import { Gamepad2, Trophy } from 'lucide-react';
+import { Gamepad2, Trophy, Sparkles } from 'lucide-react';
 import PageFooter from '@/components/PageFooter';
 import ParticleBackground from '@/components/ParticleBackground';
 import { useState, useEffect } from 'react';
@@ -45,10 +45,10 @@ const MinigamesPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background anime-bg">
       {animatedBackground && <ParticleBackground />}
       
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-wizard-pink/10 via-transparent to-wizard-blue/10"></div>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-anime-purple/15 via-transparent to-wizard-pink/15"></div>
       
       <NavBar />
       
@@ -60,7 +60,7 @@ const MinigamesPage = () => {
           transition={{ duration: 0.5 }}
         >
           <motion.h1 
-            className="text-3xl md:text-4xl font-manga font-bold text-center mb-4 bg-gradient-to-r from-wizard-pink to-wizard-purple text-transparent bg-clip-text"
+            className="text-3xl md:text-4xl font-manga font-bold text-center mb-4 bg-gradient-to-r from-wizard-pink to-anime-purple text-transparent bg-clip-text animate-glow"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -70,7 +70,7 @@ const MinigamesPage = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-center text-foreground/70 max-w-2xl mx-auto mb-8"
+            className="text-center text-foreground/70 max-w-2xl mx-auto mb-8 font-manga text-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -84,9 +84,10 @@ const MinigamesPage = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <div className="bg-wizard-purple/10 dark:bg-wizard-purple/20 px-4 py-2 rounded-full flex items-center gap-2">
+            <div className="bg-gradient-to-r from-wizard-purple/20 to-wizard-pink/20 dark:from-wizard-purple/30 dark:to-wizard-pink/30 px-6 py-3 rounded-full flex items-center gap-2 shadow-anime">
               <Trophy className="text-wizard-purple w-5 h-5" />
-              <span className="text-sm font-medium text-wizard-purple">Earn XP With Every Game!</span>
+              <span className="text-base font-manga font-medium text-wizard-purple">Level {level} • {experience} XP</span>
+              <Sparkles className="text-wizard-pink w-4 h-4" />
             </div>
           </motion.div>
           
@@ -94,6 +95,7 @@ const MinigamesPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
+            className="anime-card shadow-anime"
           >
             <MinigamesSection onXpEarned={handleXpEarned} fullPage={true} />
           </motion.div>
