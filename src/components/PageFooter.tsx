@@ -120,7 +120,7 @@ const PageFooter = () => {
           <div className="flex items-center space-x-1 text-sm text-foreground/60">
             <span>Made with</span>
             <Heart size={14} className="text-wizard-pink mx-1" />
-            <span>by Amulya</span>
+            <span>by Vijay</span>
             <Star size={14} className="text-wizard-yellow ml-1" />
           </div>
         </div>
