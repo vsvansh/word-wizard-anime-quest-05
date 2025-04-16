@@ -20,8 +20,8 @@ class AudioManager {
       correct: new Audio('/sounds/correct.mp3'),
       win: new Audio('/sounds/win.mp3'),
       wrong: new Audio('/sounds/wrong.mp3'),
-      hint: new Audio('/sounds/hint.mp3'),
-      spell: new Audio('/sounds/spell.mp3')
+      hint: new Audio('/sounds/typing.mp3'), // Using typing sound for hint
+      spell: new Audio('/sounds/win.mp3')     // Using win sound for spell
     };
 
     // Set volume for each sound
@@ -30,7 +30,7 @@ class AudioManager {
     });
 
     // Create background music audio element
-    this.backgroundMusic = new Audio('/sounds/background.mp3');
+    this.backgroundMusic = new Audio('/sounds/typing.mp3'); // Using typing as placeholder
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = this.musicVolume;
 
@@ -53,14 +53,9 @@ class AudioManager {
   // Preload sounds to avoid delay on first play
   private preloadSounds(): void {
     Object.values(this.sounds).forEach(sound => {
-      sound.preload = 'auto';
       sound.load();
     });
-    
-    if (this.backgroundMusic) {
-      this.backgroundMusic.preload = 'auto';
-      this.backgroundMusic.load();
-    }
+    this.backgroundMusic?.load();
   }
 
   // Play background music

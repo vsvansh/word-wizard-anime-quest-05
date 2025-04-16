@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Gamepad2, Trophy, Sparkles, Zap, PenTool, Brain, Timer, Search } from 'lucide-react';
+import { Gamepad2, Trophy, Sparkles, Zap, PenTool, Brain, Timer, Search, LetterCase } from 'lucide-react';
 import WordScrambleGame from '@/components/games/WordScrambleGame';
 import SpeedTypeGame from '@/components/games/SpeedTypeGame';
 import MemoryMatchGame from '@/components/games/MemoryMatchGame';
@@ -16,10 +16,9 @@ import SoundControls from '@/components/SoundControls';
 
 interface MinigamesSectionProps {
   onXpEarned?: (amount: number) => void;
-  fullPage?: boolean;
 }
 
-const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned, fullPage = false }) => {
+const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned }) => {
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const { toast } = useToast();
   
@@ -51,32 +50,30 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned, fullPag
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`relative ${fullPage ? 'w-full max-w-5xl mx-auto' : ''}`}
+      className="relative"
     >
       <div className="absolute -top-10 -left-10 w-40 h-40 bg-wizard-pink/10 rounded-full blur-3xl z-0"></div>
       <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-wizard-blue/10 rounded-full blur-3xl z-0"></div>
       
-      <Card className={`anime-card p-6 border-wizard-pink/30 relative z-10 overflow-hidden ${fullPage ? 'min-h-[500px]' : ''}`}>
+      <Card className="anime-card p-6 border-wizard-pink/30 relative z-10 overflow-hidden">
         <div className="absolute top-0 right-0 w-40 h-40 bg-wizard-purple/5 rounded-full blur-xl"></div>
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-wizard-blue/5 rounded-full blur-xl"></div>
         
-        {!fullPage && (
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <Gamepad2 className="h-5 w-5 mr-2 text-wizard-pink" />
-              <h3 className="text-xl font-manga bg-gradient-to-r from-wizard-pink to-wizard-purple text-transparent bg-clip-text">
-                Word Wizard Minigames
-              </h3>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="bg-wizard-pink/10 px-3 py-1 rounded-full text-xs text-wizard-pink flex items-center">
-                <Trophy className="h-3 w-3 mr-1" />
-                Earn XP
-              </div>
-              <SoundControls compact />
-            </div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <Gamepad2 className="h-5 w-5 mr-2 text-wizard-pink" />
+            <h3 className="text-xl font-manga bg-gradient-to-r from-wizard-pink to-wizard-purple text-transparent bg-clip-text">
+              Word Wizard Minigames
+            </h3>
           </div>
-        )}
+          <div className="flex items-center gap-2">
+            <div className="bg-wizard-pink/10 px-3 py-1 rounded-full text-xs text-wizard-pink flex items-center">
+              <Trophy className="h-3 w-3 mr-1" />
+              Earn XP
+            </div>
+            <SoundControls compact />
+          </div>
+        </div>
         
         {activeGame ? (
           <>
@@ -133,7 +130,7 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned, fullPag
           </>
         ) : (
           <Tabs defaultValue="featured" className="w-full">
-            <TabsList className={`grid grid-cols-2 mb-4 ${fullPage ? 'w-full md:w-1/2 mx-auto' : ''}`}>
+            <TabsList className="grid grid-cols-2 mb-4">
               <TabsTrigger value="featured" onClick={() => audioManager.playSound('click')}>Featured</TabsTrigger>
               <TabsTrigger value="all" onClick={() => audioManager.playSound('click')}>All Games</TabsTrigger>
             </TabsList>
@@ -227,7 +224,7 @@ const MinigamesSection: React.FC<MinigamesSectionProps> = ({ onXpEarned, fullPag
             </TabsContent>
             
             <TabsContent value="all" className="mt-2">
-              <div className={`grid grid-cols-1 ${fullPage ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-3`}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <motion.div 
                   whileHover={{ scale: 1.03 }}
                   className="bg-gradient-to-br from-wizard-blue/10 to-wizard-purple/10 rounded-lg p-3 border border-wizard-purple/20 hover:border-wizard-purple/40 transition-all cursor-pointer"

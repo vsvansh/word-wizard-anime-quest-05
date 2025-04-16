@@ -19,9 +19,6 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        manga: ["Comic Sans MS", "Comic Neue", "cursive"],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -56,13 +53,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Enhanced anime theme colors
+        // Custom game colors with neon effects
         wizard: {
-          purple: "#9b87f5",  // Enhanced purple for anime theme
-          blue: "#38bdf8",
-          pink: "#f472b6",
-          green: "#22c55e",
-          yellow: "#fde047"
+          purple: "#8B5CF6",
+          blue: "#0EA5E9",
+          pink: "#D946EF",
+          green: "#4ADE80",
+          yellow: "#FACC15"
         },
         // Enhanced palette for puzzle letters
         emerald: {
@@ -74,14 +71,6 @@ export default {
           400: "#FBBF24",
           500: "#F59E0B",
           600: "#D97706"
-        },
-        // New anime-themed colors
-        anime: {
-          purple: "#9b87f5",
-          darkPurple: "#7E69AB",
-          lightPurple: "#D6BCFA",
-          pink: "#f472b6",
-          blue: "#38bdf8",
         }
       },
       borderRadius: {
@@ -98,23 +87,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" }
-        },
-        "glow": {
-          "0%, 100%": { textShadow: "0 0 5px #9b87f5, 0 0 10px #9b87f5" },
-          "50%": { textShadow: "0 0 15px #9b87f5, 0 0 20px #9b87f5" }
-        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "float": "float 5s ease-in-out infinite",
-        "glow": "glow 2s ease-in-out infinite"
-      },
-      boxShadow: {
-        'anime': '0 0 15px rgba(155, 135, 245, 0.5)',
       },
     },
   },

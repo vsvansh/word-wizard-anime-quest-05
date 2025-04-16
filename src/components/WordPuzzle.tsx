@@ -33,7 +33,6 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
   const [guessedCorrectly, setGuessedCorrectly] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSoundControls, setShowSoundControls] = useState(false);
-  const [currentRowAnimation, setCurrentRowAnimation] = useState<number | null>(null);
   const currentRow = useRef(0);
   const { toast } = useToast();
 
@@ -49,7 +48,6 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
     setShowDefinition(false);
     setGuessedCorrectly(false);
     setShowConfetti(false);
-    setCurrentRowAnimation(null);
     currentRow.current = 0;
   }, [word, initialGuesses]);
 
@@ -88,36 +86,25 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
       return newEvaluations;
     });
 
-    // Trigger animation for the current row
-    setCurrentRowAnimation(currentRow.current);
-
     const guessedCorrectly = evaluation.every(cell => cell.status === 'correct');
     setGuessedCorrectly(guessedCorrectly);
 
     if (guessedCorrectly) {
-      setTimeout(() => {
-        setShowConfetti(true);
-        audioManager.playSound('win');
-      }, word.length * 300); // Delay after the flip animation
+      setShowConfetti(true);
+      audioManager.playSound('win');
     } else {
       // Play different sounds based on how many correct letters they have
       const correctCount = evaluation.filter(cell => cell.status === 'correct').length;
       const partialCount = evaluation.filter(cell => cell.status === 'wrong-position').length;
       
-      setTimeout(() => {
-        if (correctCount > 0 || partialCount > 0) {
-          audioManager.playSound('correct');
-        } else {
-          audioManager.playSound('wrong');
-        }
-      }, word.length * 300); // Delay after the flip animation
+      if (correctCount > 0 || partialCount > 0) {
+        audioManager.playSound('correct');
+      } else {
+        audioManager.playSound('wrong');
+      }
     }
 
-    // Delay moving to the next row for the flip animation
-    setTimeout(() => {
-      setCurrentRowAnimation(null);
-      handleKeyPress(guess);
-    }, word.length * 400); // Slightly longer than the animation delay
+    handleKeyPress(guess);
   };
 
   const handleBackspace = () => {
@@ -180,7 +167,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
   };
 
   return (
-    <div className="flex flex-col items-center justify-center relative w-full max-w-xs mx-auto">
+    <div className="flex flex-col items-center justify-center relative">
       <ConfettiExplosion 
         show={showConfetti} 
         onComplete={() => setShowConfetti(false)} 
@@ -209,19 +196,21 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
         </div>
       )}
 
-      <div className="space-y-2 mb-6 w-full max-w-xs">
+      <div className="space-y-3 mb-6">
         {guesses.map((guess, rowIndex) => (
-          <div key={rowIndex} className="flex justify-center w-full space-x-1.5">
+          <div key={rowIndex} className="flex justify-center">
             {word.split('').map((_, cellIndex) => {
+              const animationDelay = cellIndex * 0.2;
               const isEvaluated = evaluations[rowIndex] && evaluations[rowIndex][cellIndex]?.letter;
-              const isCurrentRow = rowIndex === currentRowAnimation;
-              const animationDelay = isCurrentRow ? cellIndex * 0.3 : 0;
-              const isAnimated = currentRowAnimation === rowIndex;
               
               return (
                 <motion.div
                   key={`${rowIndex}-${cellIndex}`}
-                  className={`puzzle-letter ${getCellColorClass(rowIndex, cellIndex)} ${isAnimated ? "puzzle-letter-flip" : ""}`}
+                  className={`puzzle-letter ${getCellColorClass(rowIndex, cellIndex)}`}
+                  style={{ 
+                    animationDelay: isEvaluated ? `${animationDelay}s` : '0s',
+                    animationFillMode: 'forwards'
+                  }}
                   animate={
                     isEvaluated && evaluations[rowIndex][cellIndex].status === 'correct' 
                       ? { scale: [1, 1.1, 1] }
@@ -229,10 +218,7 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
                   }
                   transition={{ 
                     duration: 0.3, 
-                    delay: animationDelay + 0.1
-                  }}
-                  style={{
-                    animationDelay: isCurrentRow ? `${animationDelay}s` : '0s',
+                    delay: animationDelay + 0.3 
                   }}
                 >
                   {guess[cellIndex]?.toUpperCase() || ''}
