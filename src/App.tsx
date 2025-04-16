@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import DailyPage from "./pages/DailyPage";
 import HowToPlayPage from "./pages/HowToPlayPage";
 import UnlimitedPage from "./pages/UnlimitedPage";
+import MinigamesPage from "./pages/MinigamesPage";
 import ProfilePage from "./pages/ProfilePage";
 import StatsPage from "./pages/StatsPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/daily" element={<DailyPage />} />
             <Route path="/unlimited" element={<UnlimitedPage />} />
+            <Route path="/minigames" element={<MinigamesPage />} />
             <Route path="/how-to-play" element={<HowToPlayPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/stats" element={<StatsPage />} />

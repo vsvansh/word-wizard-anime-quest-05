@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import NavBar from '@/components/NavBar';
 import WordPuzzle from '@/components/WordPuzzle';
@@ -5,15 +6,16 @@ import PageHeader from '@/components/unlimited/PageHeader';
 import ActionButtons from '@/components/unlimited/ActionButtons';
 import StatsCard from '@/components/unlimited/StatsCard';
 import PuzzleFooter from '@/components/unlimited/PuzzleFooter';
-import MinigamesSection from '@/components/unlimited/MinigamesSection';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast";
 import { getRandomWord } from '@/lib/wordBank';
 import audioManager from '@/lib/audioManager';
 import PageFooter from '@/components/PageFooter';
 import ParticleBackground from '@/components/ParticleBackground';
-import { Award, Trophy, Sparkles, Star } from 'lucide-react';
+import { Award, Trophy, Sparkles, Star, Gamepad2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const UnlimitedPage = () => {
   // Get saved stats or initialize with default values
@@ -235,28 +237,6 @@ const UnlimitedPage = () => {
     }
   };
 
-  const handleXpEarned = (amount: number) => {
-    // Update experience and check for level up
-    const newExp = experience + amount;
-    setExperience(newExp);
-    
-    if (newExp >= level * 100) {
-      setLevel(prev => prev + 1);
-      setShowLevelUpAnimation(true);
-      
-      toast({
-        title: `Level Up! You're now level ${level + 1}`,
-        description: `Congratulations! You gained XP from minigames.`,
-      });
-      
-      audioManager.playSound('win');
-      
-      setTimeout(() => {
-        setShowLevelUpAnimation(false);
-      }, 3000);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {animatedBackground && <ParticleBackground />}
@@ -315,7 +295,7 @@ const UnlimitedPage = () => {
         <PageHeader />
         
         <motion.div 
-          className="mb-12"
+          className="mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
@@ -330,8 +310,8 @@ const UnlimitedPage = () => {
           />
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          <div className="md:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="md:col-span-2 space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -396,7 +376,55 @@ const UnlimitedPage = () => {
           </div>
           
           <div className="space-y-6">
-            <MinigamesSection onXpEarned={handleXpEarned} />
+            {/* Minigames Link Card */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-6"
+            >
+              <Card className="anime-card p-6 border-wizard-pink/30 hover:border-wizard-pink/50 transition-all">
+                <Link to="/minigames" className="block">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Gamepad2 className="h-5 w-5 text-wizard-pink" />
+                      <h3 className="text-xl font-manga bg-gradient-to-r from-wizard-pink to-wizard-purple text-transparent bg-clip-text">
+                        Play Minigames
+                      </h3>
+                    </div>
+                    <div className="bg-wizard-pink/10 px-3 py-1 rounded-full text-xs text-wizard-pink flex items-center">
+                      <Trophy className="h-3 w-3 mr-1" />
+                      Earn XP
+                    </div>
+                  </div>
+                  <p className="text-sm text-foreground/70 mb-3">
+                    Challenge yourself with anime-themed word games and earn XP to level up!
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="bg-wizard-purple/5 p-2 rounded-md text-center text-xs">
+                      Word Scramble
+                    </div>
+                    <div className="bg-wizard-pink/5 p-2 rounded-md text-center text-xs">
+                      Speed Type
+                    </div>
+                    <div className="bg-wizard-blue/5 p-2 rounded-md text-center text-xs">
+                      Memory Match
+                    </div>
+                  </div>
+                  <div className="mt-4 text-center">
+                    <Button
+                      className="bg-wizard-pink hover:bg-wizard-pink/90 text-white"
+                      onClick={(e) => {
+                        audioManager.playSound('click');
+                        // Let link handle navigation
+                      }}
+                    >
+                      Play Now
+                    </Button>
+                  </div>
+                </Link>
+              </Card>
+            </motion.div>
             
             {/* Word Wizards Leaderboard */}
             <motion.div 

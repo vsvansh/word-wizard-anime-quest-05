@@ -157,9 +157,9 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
 
   const getKeyColorClass = (key: string) => {
     if (evaluations.some(row => row.find(cell => cell.letter === key && cell.status === 'correct'))) {
-      return 'bg-wizard-green text-white';
+      return 'bg-emerald-500 text-white';
     } else if (evaluations.some(row => row.find(cell => cell.letter === key && cell.status === 'wrong-position'))) {
-      return 'bg-wizard-yellow text-white';
+      return 'bg-amber-500 text-white';
     } else if (evaluations.some(row => row.find(cell => cell.letter === key && cell.status === 'incorrect'))) {
       return 'bg-gray-400 dark:bg-gray-700 text-gray-200';
     }
@@ -198,30 +198,32 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
 
       <div className="space-y-3 mb-6">
         {guesses.map((guess, rowIndex) => (
-          <div key={rowIndex} className="flex justify-center">
+          <div key={rowIndex} className="flex justify-center gap-1">
             {word.split('').map((_, cellIndex) => {
-              const animationDelay = cellIndex * 0.2;
+              const letter = guess[cellIndex] || '';
               const isEvaluated = evaluations[rowIndex] && evaluations[rowIndex][cellIndex]?.letter;
+              const cellClass = getCellColorClass(rowIndex, cellIndex);
+              const animationDelay = cellIndex * 0.1;
               
               return (
                 <motion.div
                   key={`${rowIndex}-${cellIndex}`}
-                  className={`puzzle-letter ${getCellColorClass(rowIndex, cellIndex)}`}
-                  style={{ 
-                    animationDelay: isEvaluated ? `${animationDelay}s` : '0s',
-                    animationFillMode: 'forwards'
-                  }}
+                  className={`puzzle-letter ${cellClass} flex items-center justify-center`}
                   animate={
                     isEvaluated && evaluations[rowIndex][cellIndex].status === 'correct' 
                       ? { scale: [1, 1.1, 1] }
                       : {}
                   }
                   transition={{ 
-                    duration: 0.3, 
-                    delay: animationDelay + 0.3 
+                    duration: 0.3,
+                    delay: animationDelay
+                  }}
+                  style={{
+                    animationDelay: `${animationDelay}s`,
+                    transitionDelay: `${animationDelay}s`
                   }}
                 >
-                  {guess[cellIndex]?.toUpperCase() || ''}
+                  {letter.toUpperCase()}
                 </motion.div>
               );
             })}
@@ -275,6 +277,81 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
           </Button>
         </motion.div>
       )}
+
+      <style jsx global>{`
+        .puzzle-letter {
+          width: 3.5rem;
+          height: 3.5rem;
+          font-size: 1.5rem;
+          font-weight: bold;
+          border: 2px solid #ccc;
+          border-radius: 0.5rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 2px;
+          transition: all 0.3s ease;
+          transform-origin: center;
+          text-transform: uppercase;
+          font-family: var(--font-manga);
+        }
+
+        @media (max-width: 640px) {
+          .puzzle-letter {
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1.25rem;
+            margin: 0 1px;
+          }
+        }
+
+        .puzzle-letter-correct {
+          background-color: #10b981;
+          border-color: #10b981;
+          color: white;
+          animation: flipIn 0.5s ease forwards;
+        }
+
+        .puzzle-letter-wrong-position {
+          background-color: #f59e0b;
+          border-color: #f59e0b;
+          color: white;
+          animation: flipIn 0.5s ease forwards;
+        }
+
+        .puzzle-letter-incorrect {
+          background-color: #4b5563;
+          border-color: #4b5563;
+          color: rgba(255, 255, 255, 0.7);
+          animation: flipIn 0.5s ease forwards;
+        }
+
+        @keyframes flipIn {
+          0% {
+            transform: rotateX(0deg);
+            background-color: transparent;
+          }
+          50% {
+            transform: rotateX(90deg);
+          }
+          100% {
+            transform: rotateX(0deg);
+          }
+        }
+
+        .animate-pulse-glow {
+          animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+          }
+        }
+      `}</style>
     </div>
   );
 };
