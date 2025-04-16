@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Key } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,6 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
   const { toast } = useToast();
 
   useEffect(() => {
-    // Initialize the game state
     resetGame();
   }, [word, initialGuesses]);
 
@@ -61,7 +59,6 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
       return newGuesses;
     });
     
-    // Play a subtle typing sound
     audioManager.playSound('typing');
   };
 
@@ -106,7 +103,6 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
       return newGuesses;
     });
     
-    // Play a subtle backspace sound
     audioManager.playSound('click');
   };
 
@@ -173,25 +169,32 @@ const WordPuzzle: React.FC<WordPuzzleProps> = ({ word = 'ANIME', onComplete, ini
       <div className="space-y-3 mb-6">
         {guesses.map((guess, rowIndex) => (
           <div key={rowIndex} className="flex justify-center">
-            {word.split('').map((_, cellIndex) => (
-              <motion.div
-                key={`${rowIndex}-${cellIndex}`}
-                className={`puzzle-letter ${getCellColorClass(rowIndex, cellIndex)}`}
-                animate={
-                  evaluations[rowIndex] && evaluations[rowIndex][cellIndex] && 
-                  evaluations[rowIndex][cellIndex].status === 'correct' ? {
-                    scale: [1, 1.1, 1],
-                    transition: { 
-                      repeat: 1, 
-                      duration: 0.3,
-                      delay: cellIndex * 0.1
-                    }
-                  } : {}
-                }
-              >
-                {guess[cellIndex]?.toUpperCase() || ''}
-              </motion.div>
-            ))}
+            {word.split('').map((_, cellIndex) => {
+              const animationDelay = cellIndex * 0.2;
+              const isEvaluated = evaluations[rowIndex] && evaluations[rowIndex][cellIndex]?.letter;
+              
+              return (
+                <motion.div
+                  key={`${rowIndex}-${cellIndex}`}
+                  className={`puzzle-letter ${getCellColorClass(rowIndex, cellIndex)}`}
+                  style={{ 
+                    animationDelay: isEvaluated ? `${animationDelay}s` : '0s',
+                    animationFillMode: 'forwards'
+                  }}
+                  animate={
+                    isEvaluated && evaluations[rowIndex][cellIndex].status === 'correct' 
+                      ? { scale: [1, 1.1, 1] }
+                      : {}
+                  }
+                  transition={{ 
+                    duration: 0.3, 
+                    delay: animationDelay + 0.3 
+                  }}
+                >
+                  {guess[cellIndex]?.toUpperCase() || ''}
+                </motion.div>
+              );
+            })}
           </div>
         ))}
       </div>
