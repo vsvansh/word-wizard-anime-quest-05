@@ -1,57 +1,42 @@
-
 #root {
+  max-width: 1280px;
   margin: 0 auto;
+  padding: 2rem;
   text-align: center;
 }
 
-/* Anime theme specific styles */
-.font-manga {
-  letter-spacing: 0.05em;
-  font-weight: bold;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.anime-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 1rem;
-  transition: all 0.3s ease;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.anime-card:hover {
-  transform: translateY(-2px);
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 
-/* Custom scrollbar that fits the anime theme */
-::-webkit-scrollbar {
-  width: 10px;
+.card {
+  padding: 2em;
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(139, 92, 246, 0.1);
-  border-radius: 10px;
+.read-the-docs {
+  color: #888;
 }
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    to bottom,
-    rgba(139, 92, 246, 0.5),
-    rgba(217, 70, 239, 0.5)
-  );
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    to bottom,
-    rgba(139, 92, 246, 0.8),
-    rgba(217, 70, 239, 0.8)
-  );
-}
-
-/* Text selection color */
-::selection {
-  background: rgba(139, 92, 246, 0.3);
-  color: inherit;
-}
-
-/* Puzzle letter specific styles moved to WorldPuzzle component */

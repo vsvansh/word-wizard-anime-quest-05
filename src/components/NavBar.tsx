@@ -8,26 +8,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Home, HelpCircle, Award, Menu, X, User, Settings, BarChart2, Sun, Moon, Infinity, Gamepad2, Volume2, VolumeX } from "lucide-react";
+import { Home, HelpCircle, Award, Menu, X, User, Settings, BarChart2, Sun, Moon, Infinity } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
-import audioManager from '@/lib/audioManager';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const location = useLocation();
-  const [soundsEnabled, setSoundsEnabled] = useState(() => audioManager.areSoundEffectsEnabled());
   
   const isActive = (path: string) => location.pathname === path;
-  
-  const toggleSound = () => {
-    const newState = audioManager.toggleSoundEffects();
-    setSoundsEnabled(newState);
-    if (newState) {
-      audioManager.playSound('click');
-    }
-  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b shadow-sm">
@@ -47,16 +37,6 @@ const NavBar = () => {
           <Button 
             variant="ghost" 
             size="icon" 
-            onClick={toggleSound}
-            className="rounded-full"
-            title={soundsEnabled ? "Mute Sounds" : "Enable Sounds"}
-          >
-            {soundsEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
-          </Button>
-          
-          <Button 
-            variant="ghost" 
-            size="icon" 
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="rounded-full"
           >
@@ -65,10 +45,7 @@ const NavBar = () => {
           
           <button 
             className="p-2 rounded-full hover:bg-accent hover:text-accent-foreground"
-            onClick={() => {
-              setIsMenuOpen(!isMenuOpen);
-              audioManager.playSound('click');
-            }}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -81,7 +58,6 @@ const NavBar = () => {
             className={`flex items-center space-x-1 font-medium transition-colors ${
               isActive('/') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
             }`}
-            onClick={() => audioManager.playSound('click')}
           >
             <Home size={18} />
             <span>Home</span>
@@ -92,7 +68,6 @@ const NavBar = () => {
             className={`flex items-center space-x-1 font-medium transition-colors ${
               isActive('/daily') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
             }`}
-            onClick={() => audioManager.playSound('click')}
           >
             <Award size={18} />
             <span>Daily</span>
@@ -103,21 +78,9 @@ const NavBar = () => {
             className={`flex items-center space-x-1 font-medium transition-colors ${
               isActive('/unlimited') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
             }`}
-            onClick={() => audioManager.playSound('click')}
           >
             <Infinity size={18} />
             <span>Unlimited</span>
-          </Link>
-          
-          <Link 
-            to="/minigames" 
-            className={`flex items-center space-x-1 font-medium transition-colors ${
-              isActive('/minigames') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
-            }`}
-            onClick={() => audioManager.playSound('click')}
-          >
-            <Gamepad2 size={18} />
-            <span>Minigames</span>
           </Link>
           
           <Link 
@@ -125,21 +88,10 @@ const NavBar = () => {
             className={`flex items-center space-x-1 font-medium transition-colors ${
               isActive('/how-to-play') ? 'text-wizard-purple' : 'text-foreground hover:text-wizard-purple'
             }`}
-            onClick={() => audioManager.playSound('click')}
           >
             <HelpCircle size={18} />
             <span>How to Play</span>
           </Link>
-          
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleSound}
-            className="rounded-full"
-            title={soundsEnabled ? "Mute Sounds" : "Enable Sounds"}
-          >
-            {soundsEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
-          </Button>
           
           <Button 
             variant="ghost" 
@@ -188,10 +140,7 @@ const NavBar = () => {
             <Link 
               to="/" 
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               <Home size={18} />
               <span>Home</span>
@@ -200,10 +149,7 @@ const NavBar = () => {
             <Link 
               to="/daily" 
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               <Award size={18} />
               <span>Daily Challenge</span>
@@ -212,34 +158,16 @@ const NavBar = () => {
             <Link 
               to="/unlimited" 
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               <Infinity size={18} />
               <span>Unlimited Play</span>
             </Link>
             
             <Link 
-              to="/minigames" 
-              className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
-            >
-              <Gamepad2 size={18} />
-              <span>Minigames</span>
-            </Link>
-            
-            <Link 
               to="/how-to-play" 
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               <HelpCircle size={18} />
               <span>How to Play</span>
@@ -248,10 +176,7 @@ const NavBar = () => {
             <Link 
               to="/profile" 
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               <User size={18} />
               <span>Profile</span>
@@ -260,10 +185,7 @@ const NavBar = () => {
             <Link 
               to="/stats" 
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               <BarChart2 size={18} />
               <span>Statistics</span>
@@ -272,10 +194,7 @@ const NavBar = () => {
             <Link 
               to="/settings" 
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-accent hover:text-accent-foreground" 
-              onClick={() => {
-                setIsMenuOpen(false);
-                audioManager.playSound('click');
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               <Settings size={18} />
               <span>Settings</span>
