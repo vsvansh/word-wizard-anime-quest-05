@@ -1,18 +1,16 @@
-
 import { Link } from 'react-router-dom';
 import { Github, Twitter, Heart, MessageSquare, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
-
 const PageFooter = () => {
   const currentYear = new Date().getFullYear();
-  
-  return (
-    <motion.footer 
-      className="border-t py-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
-    >
+  return <motion.footer className="border-t py-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm" initial={{
+    opacity: 0
+  }} animate={{
+    opacity: 1
+  }} transition={{
+    duration: 0.8,
+    delay: 0.2
+  }}>
       <div className="container max-w-6xl px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-3">
@@ -122,13 +120,11 @@ const PageFooter = () => {
           <div className="flex items-center space-x-1 text-sm text-foreground/60">
             <span>Made with</span>
             <Heart size={14} className="text-wizard-pink mx-1" />
-            <span>by Word Wizard Team</span>
+            <span>by Amulya</span>
             <Star size={14} className="text-wizard-yellow ml-1" />
           </div>
         </div>
       </div>
-    </motion.footer>
-  );
+    </motion.footer>;
 };
-
 export default PageFooter;
